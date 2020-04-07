@@ -1,6 +1,6 @@
 
 """
-Happy Number
+# Happy Number
 
 Write an algorithm to determine if a number is "happy".
 

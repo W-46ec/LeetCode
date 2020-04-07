@@ -1,6 +1,6 @@
 
 """
-Counting Elements
+# Counting Elements
 
 Given an integer array arr, count element x such that x + 1 is also in arr.
 
@@ -26,11 +26,11 @@ Example 4:
 Input: arr = [1,1,2,2]
 Output: 2
 Explanation: Two 1s are counted cause 2 is in arr.
- 
+
 
 Constraints:
-1 <= arr.length <= 1000
-0 <= arr[i] <= 1000
+    - 1 <= arr.length <= 1000
+    - 0 <= arr[i] <= 1000
 """
 
 from typing import List
