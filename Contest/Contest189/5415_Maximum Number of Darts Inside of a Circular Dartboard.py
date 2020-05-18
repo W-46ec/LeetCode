@@ -45,65 +45,41 @@ Output: 4
 from typing import List
 from math import sqrt
 
+""" O(N^3) Solution """
+
 class Solution:
     def numPoints(self, points: List[List[int]], r: int) -> int:
+
+        # Return the distance between two points
         def dist(p1, p2):
             return sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
-        
-        def colinear(coordinates):
-            if len(coordinates) <= 2:
-                return True
-            x1, y1 = coordinates[0]         # Point 1
-            x2, y2 = coordinates[1]         # Point 2
-            n1, n2 = y1 - y2, x2 - x1       # Norm Vector
-            t = n1 * x1 + n2 * y1           # 2D hyperplane: H_{(x_2 - x_1, y_2 - y_1)}^t
-            for ptr in coordinates[2 : ]:   # Check if other points are on the same line
-                # (x, y) \cdot \vec{n} == t
-                if ptr[0] * n1 + ptr[1] * n2 != t:
-                    return False
-            return True
 
-        def findCenter(ptr1, ptr2, ptr3):
-            mid1 = [0.5 * (ptr1[0] + ptr2[0]), 0.5 * (ptr1[1] + ptr2[1])]
-            mid2 = [0.5 * (ptr1[0] + ptr3[0]), 0.5 * (ptr1[1] + ptr3[1])]
-            direction1 = [ptr2[1] - ptr1[1], ptr1[0] - ptr2[0]]
-            direction2 = [ptr3[1] - ptr1[1], ptr1[0] - ptr3[0]]
+        # Find the centers of two circles given two points and a fixed radius
+        def findCenter(ptr1, ptr2, r):
+            mid = [0.5 * (ptr1[0] + ptr2[0]), 0.5 * (ptr1[1] + ptr2[1])]
+            direction = [ptr2[1] - ptr1[1], ptr1[0] - ptr2[0]]  # A vector from mid-point to the center
 
-            # Find inverse matrix
-            det = direction1[0] * (-direction2[1]) - (-direction2[0]) * direction1[1]
+            # || s \cdot \vec{direction} ||^2 = r^2 - || \vec{ptr1 mid} ||^2
+            s = sqrt(r ** 2 - dist(ptr1, mid) ** 2) / sqrt(direction[0] ** 2 + direction[1] ** 2)
+            return [
+                [mid[0] + s * direction[0], mid[1] + s * direction[1]], 
+                [mid[0] - s * direction[0], mid[1] - s * direction[1]]
+            ]
 
-            s = (-direction2[1] * (mid2[0] - mid1[0]) + direction2[0] * (mid2[1] - mid1[1])) / det
-            # t = (direction1[1] * (mid2[0] - mid1[0]) + direction1[0] * (mid2[1] - mid1[1])) / det
-
-            return [s * direction1[0] + mid1[0], s * direction1[1] + mid1[1]]
-
-        def countNum(center, points, r):
+        # Counts the number of points that fall in the given circle
+        def countNum(center, r, points):
             count = 0
             for p in points:
-                if dist(center, p) <= r:
+                if dist(center, p) <= r or abs(r - dist(center, p)) <= 1e-6:
                     count += 1
             return count
 
         ans = 1
-        if len(points) <= 1:
-            return 1
-        elif len(points) == 2:
-            return 2 if dist(points[0], points[1]) <= 2 * r else 1
-
         for i in range(len(points)):
-            if ans >= len(points):
-                break
             for j in range(i + 1, len(points)):
-                if dist(points[i], points[j]) <= 2 * r:
-                    ans = max(ans, 2)
-                    center = [0.5 * (points[j][0] + points[i][0]), 0.5 * (points[j][1] + points[i][1])]
-                    ans = max(ans, countNum(center, points, r))
-                for k in range(j + 1, len(points)):
-                    ptr1, ptr2, ptr3 = points[i], points[j], points[k]
-                    if not colinear([ptr1, ptr2, ptr3]):
-                        center = findCenter(ptr1, ptr2, ptr3)
-                        if dist(center, ptr1) <= r:
-                            ans = max(ans, countNum(center, points, r))
+                if dist(points[i], points[j]) <= 2 * r or abs(2 * r - dist(points[i], points[j])) <= 1e-6:
+                    center1, center2 = findCenter(points[i], points[j], r)
+                    ans = max(ans, countNum(center1, r, points), countNum(center2, r, points))
         return ans
 
 print(Solution().numPoints([[-2, 0], [2, 0], [0, 2], [0, -2]], 2))                  # 4
@@ -117,5 +93,74 @@ print(Solution().numPoints([[6596, -1720], [37, -1237], [2243, 1289], [6499, 186
 
 # 47
 print(Solution().numPoints([[-19, -10], [-41, -13], [-48, 11], [-38, 21], [10, 11], [26, -5], [27, -10], [39, -20], [6, -31], [-24, -32], [-38, -29], [5, -25], [25, 12], [37, -13], [-1, 28], [19, -7], [9, -15], [-14, 9], [-46, -23], [11, -43], [-13, 10], [-23, -45], [11, -19], [49, 8], [-3, 40], [-28, 5], [37, -47], [-11, -36], [-28, 36], [-32, 25], [9, 28], [44, 5], [40, 19], [-14, -3], [-40, 45], [30, -34], [-31, 42], [40, 38], [-10, -22], [-23, 6], [-48, -46], [-6, -8], [47, -40], [-41, 31], [-30, -14], [27, -49], [-35, -12], [42, 18], [-15, -7], [-45, 22], [47, 4], [-5, 41], [-7, -9], [-29, 37], [-24, 46], [20, 23], [-45, 40], [-31, -7], [-27, 48], [19, 16], [-28, -19], [6, -42], [18, -33], [30, 50], [46, 29]], 47))
+
+
+
+""" O(N^4) - Time Limit Exceeded """
+
+# from typing import List
+# from math import sqrt
+
+# class Solution:
+#     def numPoints(self, points: List[List[int]], r: int) -> int:
+
+#         def dist(p1, p2):
+#             return sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+        
+#         def colinear(coordinates):
+#             if len(coordinates) <= 2:
+#                 return True
+#             x1, y1 = coordinates[0]         # Point 1
+#             x2, y2 = coordinates[1]         # Point 2
+#             n1, n2 = y1 - y2, x2 - x1       # Norm Vector
+#             t = n1 * x1 + n2 * y1           # 2D hyperplane: H_{(x_2 - x_1, y_2 - y_1)}^t
+#             for ptr in coordinates[2 : ]:   # Check if other points are on the same line
+#                 # (x, y) \cdot \vec{n} == t
+#                 if ptr[0] * n1 + ptr[1] * n2 != t:
+#                     return False
+#             return True
+
+#         def findCenter(ptr1, ptr2, ptr3):
+#             mid1 = [0.5 * (ptr1[0] + ptr2[0]), 0.5 * (ptr1[1] + ptr2[1])]
+#             mid2 = [0.5 * (ptr1[0] + ptr3[0]), 0.5 * (ptr1[1] + ptr3[1])]
+#             direction1 = [ptr2[1] - ptr1[1], ptr1[0] - ptr2[0]]
+#             direction2 = [ptr3[1] - ptr1[1], ptr1[0] - ptr3[0]]
+
+#             # Find inverse matrix
+#             det = direction1[0] * (-direction2[1]) - (-direction2[0]) * direction1[1]
+
+#             s = (-direction2[1] * (mid2[0] - mid1[0]) + direction2[0] * (mid2[1] - mid1[1])) / det
+#             # t = (direction1[1] * (mid2[0] - mid1[0]) + direction1[0] * (mid2[1] - mid1[1])) / det
+
+#             return [s * direction1[0] + mid1[0], s * direction1[1] + mid1[1]]
+
+#         def countNum(center, r, points):
+#             count = 0
+#             for p in points:
+#                 if dist(center, p) <= r:
+#                     count += 1
+#             return count
+
+#         ans = 1
+#         if len(points) <= 1:
+#             return 1
+#         elif len(points) == 2:
+#             return 2 if dist(points[0], points[1]) <= 2 * r else 1
+
+#         for i in range(len(points)):
+#             if ans >= len(points):
+#                 break
+#             for j in range(i + 1, len(points)):
+#                 if dist(points[i], points[j]) <= 2 * r:
+#                     ans = max(ans, 2)
+#                     center = [0.5 * (points[j][0] + points[i][0]), 0.5 * (points[j][1] + points[i][1])]
+#                     ans = max(ans, countNum(center, r, points))
+#                 for k in range(j + 1, len(points)):
+#                     ptr1, ptr2, ptr3 = points[i], points[j], points[k]
+#                     if not colinear([ptr1, ptr2, ptr3]):
+#                         center = findCenter(ptr1, ptr2, ptr3)
+#                         if dist(center, ptr1) <= r:
+#                             ans = max(ans, countNum(center, r, points))
+#         return ans
 
 
