@@ -44,7 +44,7 @@ Output: -1
 Explanation: Subarray [-1] has maximum sum -1
 ```
 
-Note:
+**Note:** 
     1. -30000 <= A[i] <= 30000
     2. 1 <= A.length <= 30000
 """

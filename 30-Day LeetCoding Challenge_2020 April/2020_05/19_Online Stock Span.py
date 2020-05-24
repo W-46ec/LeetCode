@@ -27,7 +27,7 @@ Note that (for example) S.next(75) returned 4, because the last 4 prices
 (including today's price of 75) were less than or equal to today's price.
 ```
 
-Note:
+**Note:** 
     1. Calls to `StockSpanner.next(int price)` will have `1 <= price <= 10^5`.
     2. There will be at most `10000` calls to `StockSpanner.next` per test case.
     3. There will be at most `150000` calls to `StockSpanner.next` across all test cases.
