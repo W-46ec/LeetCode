@@ -12,21 +12,21 @@ Return `true` if and only if the nodes corresponding to the values `x` and `y` a
 
 
 **Example 1:** 
-![q1248-01](./img/q1248-01.png)
+![07_q1248-01](./img/993_q1248-01.png)
 ```
 Input: root = [1,2,3,4], x = 4, y = 3
 Output: false
 ```
 
 **Example 2:** 
-![q1248-02](./img/q1248-02.png)
+![07_q1248-02](./img/993_q1248-02.png)
 ```
 Input: root = [1,2,3,null,4,null,5], x = 5, y = 4
 Output: true
 ```
 
 **Example 3:** 
-![q1248-03](./img/q1248-03.png)
+![07_q1248-03](./img/993_q1248-03.png)
 ```
 Input: root = [1,2,3,null,4], x = 2, y = 3
 Output: false
