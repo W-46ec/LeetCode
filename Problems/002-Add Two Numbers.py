@@ -14,11 +14,13 @@ Explanation: 342 + 465 = 807.
 ```
 """
 
-# Definition for singly-linked list.
-class ListNode:
-    def __init__(self, val = 0, next = None):
-        self.val = val
-        self.next = next
+from util import ListNode, initList, printList
+
+# # Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val = 0, next = None):
+#         self.val = val
+#         self.next = next
 
 class Solution:
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
@@ -34,34 +36,6 @@ class Solution:
             carry = (d1 + d2 + carry) // 10
             l1, l2 = l1.next if l1 else l1, l2.next if l2 else l2
         return head
-
-# Definition for singly-linked list.
-class ListNode:
-    def __init__(self, val = 0, next = None):
-        self.val = val
-        self.next = next
-
-def initList(lst):
-    if len(lst) == 0:
-        return ListNode(None)
-    elif len(lst) == 1:
-        return ListNode(lst[0])
-    else:
-        lNode = ListNode(lst[0])
-        head = lNode
-        for i in range(1, len(lst)):
-            lNode.next = ListNode(lst[i])
-            lNode = lNode.next
-        return head
-
-def printList(lst):
-    while lst != None:
-        if lst.next:
-            print(lst.val, end = ' -> ')
-        else:
-            print(lst.val, end = '')
-        lst = lst.next
-    print()
 
 
 ll1, ll2 = initList([5]), initList([5])
