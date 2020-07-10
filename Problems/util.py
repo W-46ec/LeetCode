@@ -28,3 +28,24 @@ def printList(lst):
             print(lst.val, end = '')
         lst = lst.next
     print()
+
+
+
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, val = 0, left = None, right = None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def initTree(lst, idx = 0):
+    if idx < 0 or idx >= len(lst):
+        return None
+    if len(lst) == 0:
+        return TreeNode(None)
+    tree = TreeNode(lst[idx])
+    if 2 * idx + 1 < len(lst) and lst[2 * idx + 1] != None:
+        tree.left = initTree(lst, 2 * idx + 1)
+    if 2 * idx + 2 < len(lst) and lst[2 * idx + 2] != None:
+        tree.right = initTree(lst, 2 * idx + 2)
+    return tree
