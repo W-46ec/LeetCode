@@ -69,14 +69,14 @@ Explanation:The maximum width existing in the fourth level with the length 8 (6,
 
 # Reference: https://leetcode.com/problems/maximum-width-of-binary-tree/discuss/726732/Python-10-lines-BFS-explained-with-figure
 
-from util import initTree
+# # Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val = 0, left = None, right = None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 
-# Definition for a binary tree node.
-class TreeNode:
-    def __init__(self, val = 0, left = None, right = None):
-        self.val = val
-        self.left = left
-        self.right = right
+from util import TreeNode, initTree
 
 class Solution:
     def widthOfBinaryTree(self, root: TreeNode) -> int:
