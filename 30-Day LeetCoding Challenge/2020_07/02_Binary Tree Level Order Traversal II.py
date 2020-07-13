@@ -24,14 +24,15 @@ return its bottom-up level order traversal as:
 ```
 """
 
-from typing import List
+# # Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val = 0, left = None, right = None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 
-# Definition for a binary tree node.
-class TreeNode:
-    def __init__(self, val = 0, left = None, right = None):
-        self.val = val
-        self.left = left
-        self.right = right
+from typing import List
+from util import TreeNode, initTree
 
 class Solution:
     def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
@@ -52,4 +53,6 @@ class Solution:
         return ans
 
 
+tree = initTree([3, 9, 20, None, None, 15, 7])
+print(Solution().levelOrderBottom(tree))    # [[15, 7], [9, 20], [3]]
 
