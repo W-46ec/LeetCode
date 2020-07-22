@@ -31,60 +31,30 @@ from typing import List
 
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
-        if len(board) == 0:
+        if len(board) == 0 or len(word) > len(board) * len(board[0]):
             return False
 
-        counted_pos = []
-        row, col = len(board), len(board[0])
-
-        def search(word, prev_pos):
-            if len(word) == 0:
+        def dfs(x, y, prefix, visited):
+            if len(prefix) == 0:
                 return True
-            stat = True
-            if prev_pos[0] > 0:
-                if word[0] == board[prev_pos[0] - 1][prev_pos[1]] and \
-                    (prev_pos[0] - 1, prev_pos[1]) not in counted_pos:
-                    counted_pos.append((prev_pos[0] - 1, prev_pos[1]))
-                    if search(word[1:], (prev_pos[0] - 1, prev_pos[1])):
-                        return True
-                    else:
-                        counted_pos.pop(len(counted_pos) - 1)
-            if prev_pos[0] < row - 1:
-                if word[0] == board[prev_pos[0] + 1][prev_pos[1]] and \
-                    (prev_pos[0] + 1, prev_pos[1]) not in counted_pos:
-                    counted_pos.append((prev_pos[0] + 1, prev_pos[1]))
-                    if search(word[1:], (prev_pos[0] + 1, prev_pos[1])):
-                        return True
-                    else:
-                        counted_pos.pop(len(counted_pos) - 1)
-            if prev_pos[1] > 0:
-                if word[0] == board[prev_pos[0]][prev_pos[1] - 1] and \
-                    (prev_pos[0], prev_pos[1] - 1) not in counted_pos:
-                    counted_pos.append((prev_pos[0], prev_pos[1] - 1))
-                    if search(word[1:], (prev_pos[0], prev_pos[1] - 1)):
-                        return True
-                    else:
-                        counted_pos.pop(len(counted_pos) - 1)
-            if prev_pos[1] < col - 1:
-                if word[0] == board[prev_pos[0]][prev_pos[1] + 1] and \
-                    (prev_pos[0], prev_pos[1] + 1) not in counted_pos:
-                    counted_pos.append((prev_pos[0], prev_pos[1] + 1))
-                    if search(word[1:], (prev_pos[0], prev_pos[1] + 1)):
-                        return True
-                    else:
-                        counted_pos.pop(len(counted_pos) - 1)
-            return False
+            if x < 0 or x >= len(board) or \
+                y < 0 or y >= len(board[0]) or \
+                board[x][y] != prefix[0] or \
+                visited[x][y]:
+                return False
+            visited[x][y], result = True, False
+            for i, j in [[0, 1], [0, -1], [1, 0], [-1, 0]]:
+                result |= dfs(x + i, y + j, prefix[1 : ], visited)
+                if result:
+                    break
+            visited[x][y] = False
+            return result
 
-        for i in range(row):
-            idx = -1
-            while word[0] in board[i][idx + 1:]:
-                idx = board[i].index(word[0], idx + 1)
-                curr_pos = (i, idx)
-                counted_pos.append(curr_pos)
-                if search(word[1:], curr_pos):
+        visited = [[False] * len(board[0]) for x in range(len(board))]
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if dfs(i, j, word, visited):
                     return True
-                else:
-                    counted_pos.pop(len(counted_pos) - 1)
         return False
 
 
