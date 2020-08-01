@@ -31,8 +31,21 @@ from typing import List
 
 class Solution:
     def findMin(self, nums: List[int]) -> int:
-        # Built-in function
-        return min(nums)
+        # # Built-in function
+        # return min(nums)
+
+        # Bisection method
+        # Reference: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/discuss/754104/Linear-and-Binary-Search-Algorithm-Explained-or-Diagram
+        lo, hi = 0, len(nums) - 1
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if nums[mid] > nums[hi]:
+                lo = mid + 1
+            elif nums[mid] < nums[hi]:
+                hi = mid
+            else:   # nums[mid] == nums[hi]
+                hi -= 1
+        return nums[lo]
 
 print(Solution().findMin([1, 3, 5]))        # 1
 print(Solution().findMin([2, 2, 2, 0, 1]))  # 0
