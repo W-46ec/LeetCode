@@ -43,17 +43,14 @@ from typing import List
 
 class Solution:
     def orangesRotting(self, grid: List[List[int]]) -> int:
-        time = 0
-        queue = [(i, j, 0) for i in range(len(grid)) for j in range(len(grid[0])) if grid[i][j] == 2]
-        visited = [[False] * len(grid[0]) for i in range(len(grid))]
+        time, queue = 0, [(i, j, 0) for i in range(len(grid)) for j in range(len(grid[0])) if grid[i][j] == 2]
         while queue:
             x, y, level = queue.pop(0)
             time, grid[x][y] = level if level > time else time, 2
             for i, j in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
-                if x + i in range(len(grid)) and y + j in range(len(grid[0])) and \
-                    grid[x + i][y + j] == 1 and not visited[x + i][y + j]:
+                if x + i in range(len(grid)) and y + j in range(len(grid[0])) and grid[x + i][y + j] == 1:
                     queue += [(x + i, y + j, level + 1)]
-                    visited[x + i][y + j] = True
+                    grid[x + i][y + j] += 10
         return -1 if any(map(lambda lst: 1 in lst, grid)) else time
 
 # 4
