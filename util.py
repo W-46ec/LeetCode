@@ -38,14 +38,41 @@ class TreeNode:
         self.left = left
         self.right = right
 
+# # Works for full binary trees
+# def initTree(lst, idx = 0):
+#     if idx < 0 or idx >= len(lst):
+#         return None
+#     if len(lst) == 0:
+#         return TreeNode(None)
+#     tree = TreeNode(lst[idx])
+#     if 2 * idx + 1 < len(lst) and lst[2 * idx + 1] != None:
+#         tree.left = initTree(lst, 2 * idx + 1)
+#     if 2 * idx + 2 < len(lst) and lst[2 * idx + 2] != None:
+#         tree.right = initTree(lst, 2 * idx + 2)
+#     return tree
+
+# WIP
 def initTree(lst, idx = 0):
-    if idx < 0 or idx >= len(lst):
+    if idx < 0 or idx >= len(lst) or lst[idx] == None:
         return None
-    if len(lst) == 0:
-        return TreeNode(None)
     tree = TreeNode(lst[idx])
     if 2 * idx + 1 < len(lst) and lst[2 * idx + 1] != None:
         tree.left = initTree(lst, 2 * idx + 1)
-    if 2 * idx + 2 < len(lst) and lst[2 * idx + 2] != None:
         tree.right = initTree(lst, 2 * idx + 2)
+    else:
+        tree.right = initTree(lst[2 * idx + 2 : ])
     return tree
+
+
+def levelOrderTraverse(tree):
+    if not tree:
+        return []
+    lst, queue = [], [tree]
+    while queue:
+        node = queue.pop(0)
+        lst.append(node.val)
+        queue += [node.left] if node.left else []
+        queue += [node.right] if node.right else []
+    return lst
+
+
