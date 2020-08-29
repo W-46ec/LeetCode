@@ -40,7 +40,7 @@ Return 3. The paths that sum to 8 are:
 # Reference: https://leetcode.com/problems/path-sum-iii/discuss/779227/Python-dfs-%2B-hash-table-using-cumulative-sums-explained
 
 import sys
-sys.path.append('../../')
+sys.path = ['.', '../', '../../'] + sys.path
 
 from util import TreeNode, initTree
 from collections import defaultdict
