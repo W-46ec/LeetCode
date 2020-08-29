@@ -66,5 +66,13 @@ def levelOrderTraverse(tree):
         queue += [node.right] if node.right else []
     return lst
 
-
-
+def preOrderTraverse(tree):
+    if not tree:
+        return []
+    lst, stack = [], [tree]
+    while stack:
+        node = stack.pop()
+        lst += [node.val]
+        stack += [node.right] if node.right else []
+        stack += [node.left] if node.left else []
+    return lst
