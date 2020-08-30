@@ -49,7 +49,7 @@ However, in the report "[1,5,6]", the node value of 5 comes first since 5 is sma
 #         self.right = right
 
 import sys
-sys.path.append('../../')
+sys.path = ['.', '../', '../../'] + sys.path
 
 from typing import List
 from util import TreeNode, initTree
