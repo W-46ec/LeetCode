@@ -55,6 +55,35 @@ def initTree(lst):
             Q += [node.right] if node.right else []
     return root
 
+def tree2List(tree):
+    if not tree:
+        return []
+    lst, queue = [], [tree]
+    while queue:
+        node = queue.pop(0)
+        lst += [node.val] if node else [node]
+        queue += [node.left] if node else []
+        queue += [node.right] if node else []
+    while lst and lst[-1] == None:
+        lst.pop()
+    return lst
+
+def serializeTree(tree):
+    return str(tree2List(tree)).replace('None', 'null')
+
+def deserializeTree(string):
+    try:
+        string = string.strip().replace('null', 'None')
+        if len(string) < 2 or string[0] != '[' or string[-1] != ']':
+            raise Exception("Parsing Error!")
+        lst = list(map(
+            lambda x: int(x) if x != 'None' else None, 
+            [x.strip() for x in string[1 : -1].split(',')]
+        )) if string != '[]' else []
+    except:
+        raise Exception("Parsing Error!")
+    return initTree(lst)
+
 def levelOrderTraverse(tree):
     if not tree:
         return []
@@ -76,3 +105,5 @@ def preOrderTraverse(tree):
         stack += [node.right] if node.right else []
         stack += [node.left] if node.left else []
     return lst
+
+
