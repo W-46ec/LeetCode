@@ -51,7 +51,7 @@ Another valid answer is [5,2,6,null,4,null,7].
 import sys
 sys.path = ['.', '../', '../../'] + sys.path
 
-from util import TreeNode, initTree
+from util import TreeNode, serializeTree, deserializeTree
 
 class Solution:
     def deleteNode(self, root: TreeNode, key: int) -> TreeNode:
@@ -75,4 +75,14 @@ class Solution:
             root.right = self.deleteNode(root.right, key)
         return root
 
+# "[5, 4, 6, 2, null, null, 7]"
+print(serializeTree(Solution().deleteNode(deserializeTree("[5, 3, 6, 2, 4, null, 7]"), 3)))
 
+# "[5, 3, 6, 2, 4, null, 7]"
+print(serializeTree(Solution().deleteNode(deserializeTree("[5, 3, 6, 2, 4, null, 7]"), 0)))
+
+# "[]"
+print(serializeTree(Solution().deleteNode(deserializeTree("[]"), 0)))
+
+# "[6, 3, 7, 2, 4]"
+print(serializeTree(Solution().deleteNode(deserializeTree("[5, 3, 6, 2, 4, null, 7]"), 5)))
