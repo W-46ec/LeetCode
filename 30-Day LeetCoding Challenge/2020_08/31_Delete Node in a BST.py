@@ -51,50 +51,38 @@ Another valid answer is [5,2,6,null,4,null,7].
 import sys
 sys.path = ['.', '../', '../../'] + sys.path
 
-from util import TreeNode, initTree
+from util import TreeNode, serializeTree, deserializeTree
 
 class Solution:
     def deleteNode(self, root: TreeNode, key: int) -> TreeNode:
         if not root:
             return root
-        node, parent, childNum = root, None, None
-        while node.val != key:
-            if key < node.val and node.left:
-                node, parent, childNum = node.left, node, 0
-                continue
-            elif key > node.val and node.right:
-                node, parent, childNum = node.right, node, 1
-                continue
-            return root
-
-        if not node.left and not node.right:
-            if not parent:
-                return None
-            if childNum == 0:
-                parent.left = None
+        if root.val == key:
+            if not root.left:
+                return root.right
+            elif not root.right:
+                return root.left
             else:
-                parent.right = None
-        elif not node.right:
-            if not parent:
-                return node.left
-            if childNum == 0:
-                parent.left = node.left
-            else:
-                parent.right = node.left
-        elif not node.left:
-            if not parent:
-                return node.right
-            if childNum == 0:
-                parent.left = node.right
-            else:
-                parent.right = node.right
+                # Find successor
+                succ = root.right
+                while succ and succ.left:
+                    succ = succ.left
+                root.val = succ.val
+                root.right = self.deleteNode(root.right, succ.val)
+        elif key < root.val:
+            root.left = self.deleteNode(root.left, key)
         else:
-            # Find successor
-            succ = node.right
-            while succ and succ.left:
-                succ = succ.left
-            node.val = succ.val
-            node.right = self.deleteNode(node.right, succ.val)
+            root.right = self.deleteNode(root.right, key)
         return root
 
+# "[5, 4, 6, 2, null, null, 7]"
+print(serializeTree(Solution().deleteNode(deserializeTree("[5, 3, 6, 2, 4, null, 7]"), 3)))
 
+# "[5, 3, 6, 2, 4, null, 7]"
+print(serializeTree(Solution().deleteNode(deserializeTree("[5, 3, 6, 2, 4, null, 7]"), 0)))
+
+# "[]"
+print(serializeTree(Solution().deleteNode(deserializeTree("[]"), 0)))
+
+# "[6, 3, 7, 2, 4]"
+print(serializeTree(Solution().deleteNode(deserializeTree("[5, 3, 6, 2, 4, null, 7]"), 5)))
