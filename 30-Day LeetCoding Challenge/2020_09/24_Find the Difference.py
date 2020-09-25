@@ -26,11 +26,17 @@ from collections import Counter
 
 class Solution:
     def findTheDifference(self, s: str, t: str) -> str:
-        # O(nlogn) time & O(1) space
-        s, t = sorted(s), sorted(t)
-        for i in range(len(s)):
-            if s[i] != t[i]:
-                return t[i]
-        return t[-1]
+        # # O(nlogn) time & O(1) space
+        # s, t = sorted(s), sorted(t)
+        # for i in range(len(s)):
+        #     if s[i] != t[i]:
+        #         return t[i]
+        # return t[-1]
+
+        # O(n) time & O(n) space
+        freq_s, freq_t = Counter(s), Counter(t)
+        for c in s:
+            freq_t[c] -= 1
+        return [x for x in freq_t if freq_t[x] == 1][0]
 
 print(Solution().findTheDifference("abcd", "abcde"))	# 'e'
