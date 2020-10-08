@@ -43,6 +43,22 @@ class Solution:
         #     node.next, ptr = ptr, node
         # return ptr
 
+        # # O(n) Recursive
+        # if not head or not head.next:
+        #     return head
+        # tail = self.reverseList(head.next)
+        # head.next.next, head.next = head, None
+        # return tail
+
 # 5 -> 4 -> 3 -> 2 -> 1 -> NULL
 printList(Solution().reverseList(initList([1, 2, 3, 4, 5])))
+
+# NULL
+printList(Solution().reverseList(initList([])))
+
+# 1 -> NULL
+printList(Solution().reverseList(initList([1])))
+
+# 2 -> 1 -> NULL
+printList(Solution().reverseList(initList([1, 2])))
 
