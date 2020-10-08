@@ -11,7 +11,7 @@ class ListNode:
 
 def initList(lst: List) -> ListNode:
     if len(lst) == 0:
-        return ListNode(None)
+        return None
     elif len(lst) == 1:
         return ListNode(lst[0])
     else:
@@ -24,12 +24,9 @@ def initList(lst: List) -> ListNode:
 
 def printList(lst: ListNode) -> None:
     while lst != None:
-        if lst.next:
-            print(lst.val, end = ' -> ')
-        else:
-            print(lst.val, end = '')
+        print(lst.val, end = ' -> ')
         lst = lst.next
-    print()
+    print('NULL')
 
 
 
