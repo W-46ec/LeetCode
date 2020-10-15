@@ -2,27 +2,28 @@
 """
 # Number Complement
 
-Given a positive integer, output its complement number. The complement strategy is to flip the bits of its binary representation.
+Given a **positive** integer `num`, output its complement number. The complement strategy is to flip the bits of its binary representation.
 
 
-**Example 1:**
+**Example 1:** 
 ```
-Input: 5
+Input: num = 5
 Output: 2
 Explanation: The binary representation of 5 is 101 (no leading zero bits), and its complement is 010. So you need to output 2.
 ```
 
 **Example 2:** 
 ```
-Input: 1
+Input: num = 1
 Output: 0
 Explanation: The binary representation of 1 is 1 (no leading zero bits), and its complement is 0. So you need to output 0.
 ```
 
-Note:
-    1. The given integer is guaranteed to fit within the range of a 32-bit signed integer.
-    2. You could assume no leading zero bit in the integer’s binary representation.
-    3. This question is the same as 1009: https://leetcode.com/problems/complement-of-base-10-integer/
+**Constraints:** 
+    - The given integer `num` is guaranteed to fit within the range of a 32-bit signed integer.
+    - `num >= 1` 
+    - You could assume no leading zero bit in the integer’s binary representation.
+    - This question is the same as 1009: [https://leetcode.com/problems/complement-of-base-10-integer/](https://leetcode.com/problems/complement-of-base-10-integer/)
 """
 
 class Solution:
@@ -39,13 +40,8 @@ class Solution:
 
 testcases = [5, 1, 7, 8, 0, 2]
 
+# 2 0 0 7 1 1
 for x in testcases:
-    print(Solution().findComplement(x))
-    """
-    2
-    0
-    0
-    7
-    1
-    1
-    """
+    print(Solution().findComplement(x), end = ' ')
+print()
+
