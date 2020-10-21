@@ -12,7 +12,7 @@ If it cannot be done, return `-1`.
 
 
 **Example 1:** 
-![19_domino](19_domino.png)
+![19_domino](./img/19_domino.png)
 ```
 Input: A = [2,1,2,4,2,2], B = [5,2,6,2,3,2]
 Output: 2
