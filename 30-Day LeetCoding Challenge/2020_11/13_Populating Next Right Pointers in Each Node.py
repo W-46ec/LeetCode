@@ -35,6 +35,8 @@ Explanation: Given the above perfect binary tree (Figure A), your function shoul
     - `-1000 <= node.val <= 1000` 
 """
 
+from typing import List
+
 # Definition for a Node.
 class Node:
     def __init__(self, val: int = 0, left: 'Node' = None, right: 'Node' = None, next: 'Node' = None):
@@ -42,6 +44,33 @@ class Node:
         self.left = left
         self.right = right
         self.next = next
+
+def initTree(lst: List) -> Node:
+    if not lst:
+        return None
+    root = Node(lst.pop(0))
+    Q = [root]
+    while Q:
+        node = Q.pop(0)
+        if lst:
+            val = lst.pop(0)
+            node.left = Node(val) if val != None else None
+            Q += [node.left] if node.left else []
+        if lst:
+            val = lst.pop(0)
+            node.right = Node(val) if val != None else None
+            Q += [node.right] if node.right else []
+    return root
+
+def printSoln(root):
+    lst = []
+    while root:
+        node = root
+        while node:
+            lst, node = lst + [node.val], node.next
+        lst += ['#']
+        root = root.left
+    print(lst)
 
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
@@ -65,4 +94,6 @@ class Solution:
             self.connect(root.right)
         return root
 
+# [1, '#', 2, 3, '#', 4, 5, 6, 7, '#']
+printSoln(Solution().connect(initTree([1, 2, 3, 4, 5, 6, 7])))
 
