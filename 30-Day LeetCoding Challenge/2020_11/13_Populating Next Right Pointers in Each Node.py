@@ -45,13 +45,24 @@ class Node:
 
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
-        if not root:
-            return None
-        queue = [(0, root)]
-        for level, node in queue:
-            queue += [(level + 1, node.left)] if node.left else []
-            queue += [(level + 1, node.right)] if node.right else []
-        for i in range(len(queue) - 1):
-            queue[i][1].next = queue[i + 1][1] if queue[i][0] == queue[i + 1][0] else None
-        return queue[0][1]
+        # # O(n) space
+        # if not root:
+        #     return None
+        # queue = [(0, root)]
+        # for level, node in queue:
+        #     queue += [(level + 1, node.left)] if node.left else []
+        #     queue += [(level + 1, node.right)] if node.right else []
+        # for i in range(len(queue) - 1):
+        #     queue[i][1].next = queue[i + 1][1] if queue[i][0] == queue[i + 1][0] else None
+        # return queue[0][1]
+        
+        # O(1) space
+        if root and root.left:  # Within subtree
+            root.left.next = root.right
+            if root.next:       # Between subtrees
+                root.right.next = root.next.left
+            self.connect(root.left)
+            self.connect(root.right)
+        return root
+
 
