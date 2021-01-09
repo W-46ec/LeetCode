@@ -14,7 +14,7 @@ Return *a reference to the same node* in the `cloned` tree.
 
 
 **Example 1:** 
-![02_e1](./img/02_e1.png)
+![1379_e1](./img/1379_e1.png)
 ```
 Input: tree = [7,4,3,null,null,6,19], target = 3
 Output: 3
@@ -22,28 +22,28 @@ Explanation: In all examples the original and cloned trees are shown. The target
 ```
 
 **Example 2:** 
-![02_e2](./img/02_e2.png)
+![1379_e2](./img/1379_e2.png)
 ```
 Input: tree = [7], target =  7
 Output: 7
 ```
 
 **Example 3:** 
-![02_e3](./img/02_e3.png)
+![1379_e3](./img/1379_e3.png)
 ```
 Input: tree = [8,null,6,null,5,null,4,null,3,null,2,null,1], target = 4
 Output: 4
 ```
 
 **Example 4:** 
-![02_e4](./img/02_e4.png)
+![1379_e4](./img/1379_e4.png)
 ```
 Input: tree = [1,2,3,4,5,6,7,8,9,10], target = 5
 Output: 5
 ```
 
 **Example 5:** 
-![02_e5](./img/02_e5.png)
+![1379_e5](./img/1379_e5.png)
 ```
 Input: tree = [1,2,null,3], target = 2
 Output: 2
