@@ -1,14 +1,61 @@
-def divide(dividend, divisor):
-	"""
-	:type dividend: int
-	:type divisor: int
-	:rtype: int
-	"""
-	quotient = dividend // divisor
-	if quotient < 0 and dividend % divisor != 0:
-		quotient += 1
-	if quotient > 2 ** 31 - 1:
-		return 2 ** 31 - 1
-	elif quotient < -(2 ** 31):
-		return -(2 ** 31)
-	return quotient
+
+"""
+# Divide Two Integers
+
+Given two integers `dividend` and `divisor`, divide two integers without using multiplication, division, and mod operator.
+
+Return the quotient after dividing `dividend` by `divisor`.
+
+The integer division should truncate toward zero, which means losing its fractional part. For example, `truncate(8.345) = 8` and `truncate(-2.7335) = -2`.
+
+**Note:** 
+    - Assume we are dealing with an environment that could only store integers within the 32-bit signed integer range: [−2^31, 2^31 − 1]. For this problem, assume that your function **returns 2^31 − 1 when the division result overflows**.
+
+**Example 1:** 
+```
+Input: dividend = 10, divisor = 3
+Output: 3
+Explanation: 10/3 = truncate(3.33333..) = 3.
+```
+
+**Example 2:** 
+```
+Input: dividend = 7, divisor = -3
+Output: -2
+Explanation: 7/-3 = truncate(-2.33333..) = -2.
+```
+
+**Example 3:** 
+```
+Input: dividend = 0, divisor = 1
+Output: 0
+```
+
+**Example 4:** 
+```
+Input: dividend = 1, divisor = 1
+Output: 1
+```
+
+**Constraints:** 
+    - `-2^31 <= dividend, divisor <= 2^31 - 1` 
+    - `divisor != 0` 
+"""
+
+class Solution:
+    def divide(self, dividend: int, divisor: int) -> int:
+        ans = int(dividend / divisor)
+        return ans if -2 ** 31 <= ans < 2 ** 31 else 2 ** 31 - 1
+
+# 3
+print(Solution().divide(10, 3))
+
+# -2
+print(Solution().divide(7, -3))
+
+# 0
+print(Solution().divide(0, 1))
+
+# 1
+print(Solution().divide(1, 1))
+
