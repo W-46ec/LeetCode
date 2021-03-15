@@ -63,15 +63,24 @@ from util import ListNode, initList, printList
 
 class Solution:
     def swapNodes(self, head: ListNode, k: int) -> ListNode:
-        curr, node1, length = head, None, 0
+        # # O(n) time & O(1) space
+        # curr, node1, length = head, None, 0
+        # while curr:
+        #     if length == k - 1:
+        #         node1 = curr
+        #     curr, length = curr.next, length + 1
+        # node2 = head
+        # for _ in range(length - k):
+        #     node2 = node2.next
+        # node1.val, node2.val = node2.val, node1.val
+        # return head
+
+        # O(n) time & O(n) space
+        lst, curr, idx = [], head, 1
         while curr:
-            if length == k - 1:
-                node1 = curr
-            curr, length = curr.next, length + 1
-        node2 = head
-        for _ in range(length - k):
-            node2 = node2.next
-        node1.val, node2.val = node2.val, node1.val
+            lst+= [curr]
+            curr, idx = curr.next, idx + 1
+        lst[k - 1].val, lst[-k].val = lst[-k].val, lst[k - 1].val
         return head
 
 # 5 -> 2 -> 3 -> 4 -> 1 -> NULL
