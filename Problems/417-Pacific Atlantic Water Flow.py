@@ -46,20 +46,17 @@ class Solution:
         reachable = defaultdict(int)
         
         def bfs(queue: List[tuple], ocean: int) -> None:
-            visited = defaultdict(bool)
-            seen = defaultdict(bool, { k: True for k in queue })
+            visited = defaultdict(bool, { k: True for k in queue })
             while queue:
                 x, y = queue.pop(0)
-                visited[(x, y)] = True
                 reachable[(x, y)] += ocean
                 for dx, dy in [[-1, 0], [0, -1], [0, 1], [1, 0]]:
                     if 0 <= x + dx < len(matrix) \
                             and 0 <= y + dy < len(matrix[0]) \
                             and not visited[(x + dx, y + dy)] \
-                            and not seen[(x + dx, y + dy)] \
                             and matrix[x + dx][y + dy] >= matrix[x][y]:
                         queue += [(x + dx, y + dy)]
-                        seen[(x + dx, y + dy)] = True
+                        visited[(x + dx, y + dy)] = True
         
         # Set up initial queues
         queue_Pac = [(i, 0) for i in range(len(matrix))] \
