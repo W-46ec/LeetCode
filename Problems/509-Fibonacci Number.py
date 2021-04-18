@@ -38,11 +38,14 @@ from math import sqrt
 
 class Solution:
     def fib(self, n: int) -> int:
-        # O(n)
-        a, b = 0, 1
-        for _ in range(n):
-            a, b = b, a + b
-        return a
+        # # O(n)
+        # a, b = 0, 1
+        # for _ in range(n):
+        #     a, b = b, a + b
+        # return a
+    
+        # O(1)
+        return int((sqrt(5) / 5) * (((1 + sqrt(5)) / 2) ** n - ((1 - sqrt(5)) / 2) ** n))
 
 # 1
 print(Solution().fib(1))
