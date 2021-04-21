@@ -40,12 +40,20 @@ from typing import List
 
 class Solution:
     def preorder(self, root: 'Node') -> List[int]:
-        # Recursive solution
+        # # Recursive solution
+        # if not root:
+        #     return []
+        # res = [root.val]
+        # for node in root.children:
+        #     res += self.preorder(node)
+        # return res
+
+        # Iterative solution
         if not root:
             return []
-        res = [root.val]
-        for node in root.children:
-            res += self.preorder(node)
+        stack, res = [root], []
+        while stack:
+            node = stack.pop()
+            res += [node.val]
+            stack += [child for child in reversed(node.children) if child]
         return res
-
-
