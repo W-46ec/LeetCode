@@ -38,14 +38,20 @@ from typing import List
 
 class Solution:
     def minimumTotal(self, triangle: List[List[int]]) -> int:
-        # Auxiliary Space -- O(n^2) space
-        curr_cost = triangle[-1]
+        # # Auxiliary Space -- O(n^2) space
+        # curr_cost = triangle[-1]
+        # for i in range(len(triangle) - 2, -1, -1):
+        #     lst, min_cost = triangle[i], [0] * len(triangle[i])
+        #     for j in range(len(lst)):
+        #         min_cost[j] = lst[j] + min(curr_cost[j], curr_cost[j + 1])
+        #     curr_cost = min_cost
+        # return curr_cost[0]
+        
+        # Modify in place -- O(n) -space
         for i in range(len(triangle) - 2, -1, -1):
-            lst, min_cost = triangle[i], [0] * len(triangle[i])
-            for j in range(len(lst)):
-                min_cost[j] = lst[j] + min(curr_cost[j], curr_cost[j + 1])
-            curr_cost = min_cost
-        return curr_cost[0]
+            for j in range(len(triangle[i])):
+                triangle[i][j] += min(triangle[i + 1][j], triangle[i + 1][j + 1])
+        return triangle[0][0]
 
 # 11
 print(Solution().minimumTotal([[2], [3, 4], [6, 5, 7], [4, 1, 8, 3]]))
