@@ -29,6 +29,8 @@ Explanation: You can't get a non-decreasing array by modify at most one element.
 
 # https://leetcode.com/problems/non-decreasing-array/discuss/106816/Python-Extremely-Easy-to-Understand
 
+from typing import List
+
 class Solution:
     def checkPossibility(self, nums: List[int]) -> bool:
         arr1, arr2 = nums[:], nums[:]
