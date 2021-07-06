@@ -46,13 +46,19 @@ M[i] => M[i/n][n%i] Will it result in right mapping? Take some example and check
 
 from typing import List
 from functools import reduce
+import numpy as np
 
 class Solution:
     def matrixReshape(self, mat: List[List[int]], r: int, c: int) -> List[List[int]]:
-        # Array solution
+        # # Array solution
+        # if len(mat) * len(mat[0]) == r * c:
+        #     arr = reduce(lambda x, y: x + y, mat)
+        #     return [arr[i * c : (i + 1) * c] for i in range(r)]
+        # return mat
+
+        # Numpy solution
         if len(mat) * len(mat[0]) == r * c:
-            arr = reduce(lambda x, y: x + y, mat)
-            return [arr[i * c : (i + 1) * c] for i in range(r)]
+            return np.array(mat).reshape(r, c)
         return mat
 
 # [[1, 2, 3, 4]]
