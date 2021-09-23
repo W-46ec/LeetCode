@@ -42,7 +42,7 @@ class Solution:
         # return ans
         
         # Split the array by 0, and then return the length of the longest segment
-        return max(map(len, "".join(map(str, nums)).split('0')))
+        return len(max("".join(map(str, nums)).split('0'), key = len))
 
 # 3
 print(Solution().findMaxConsecutiveOnes([1, 1, 0, 1, 1, 1]))
