@@ -42,6 +42,9 @@ Explanation: No matter what sequence of moves you make, you cannot end with a va
     - `board[i][j]` is either `0` or `1`.
 """
 
+# Reference: https://leetcode.com/problems/transform-to-chessboard/solution/
+# Reference: https://leetcode.com/problems/transform-to-chessboard/discuss/114843/Key-Observation-on-property-of-ChessBoard
+
 from typing import List
 from collections import Counter
 
