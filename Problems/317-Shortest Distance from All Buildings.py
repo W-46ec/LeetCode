@@ -46,6 +46,9 @@ Output: -1
     - There will be **at least one** building in the `grid`.
 """
 
+# Reference: https://leetcode.com/problems/shortest-distance-from-all-buildings/discuss/76877/Python-solution-72ms-beats-100-BFS-with-pruning
+# Reference: https://leetcode.com/problems/shortest-distance-from-all-buildings/solution/
+
 from typing import List
 
 class Solution:
