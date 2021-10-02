@@ -63,24 +63,38 @@ Output: 1
 
 class Solution:
     def leftMostColumnWithOne(self, binaryMatrix: 'BinaryMatrix') -> int:
-        def binarySearch(row, lo, hi):
-            if binaryMatrix.get(row, hi) == 0:
-                return -1
-            if binaryMatrix.get(row, lo) == 1:
-                return lo
-            mid = (lo + hi) // 2
-            if binaryMatrix.get(row, mid) == 1:
-                return binarySearch(row, lo, mid)
-            else:
-                return binarySearch(row, mid + 1, hi)
-
-        ans, (n, m) = -1, binaryMatrix.dimensions()
+        # Iterative Solution
+        n, m = binaryMatrix.dimensions()
+        ans = m
         for row in range(n):
-            if ans == -1:
-                ans = binarySearch(row, 0, m - 1)
-            else:
-                if binaryMatrix.get(row, ans) == 1:
-                    ans = binarySearch(row, 0, ans)
-        return ans
+            lo, hi = 0, ans - 1
+            while lo <= hi:
+                mid = (lo + hi) // 2
+                if binaryMatrix.get(row, mid) == 1:
+                    ans, hi = mid, mid - 1
+                else:
+                    lo = mid + 1
+        return ans if ans != m else -1
+
+        # # Recurrsive Solution
+        # def binarySearch(row, lo, hi):
+        #     if binaryMatrix.get(row, hi) == 0:
+        #         return -1
+        #     if binaryMatrix.get(row, lo) == 1:
+        #         return lo
+        #     mid = (lo + hi) // 2
+        #     if binaryMatrix.get(row, mid) == 1:
+        #         return binarySearch(row, lo, mid)
+        #     else:
+        #         return binarySearch(row, mid + 1, hi)
+
+        # ans, (n, m) = -1, binaryMatrix.dimensions()
+        # for row in range(n):
+        #     if ans == -1:
+        #         ans = binarySearch(row, 0, m - 1)
+        #     else:
+        #         if binaryMatrix.get(row, ans) == 1:
+        #             ans = binarySearch(row, 0, ans)
+        # return ans
 
 
