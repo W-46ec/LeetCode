@@ -2,28 +2,34 @@
 """
 # Word Search II
 
-Given a 2D board and a list of words from the dictionary, find all words in the board.
+Given an `m x n` `board` of characters and a list of strings `words`, return *all words on the board*.
 
-Each word must be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once in a word.
+Each word must be constructed from letters of sequentially adjacent cells, where **adjacent cells** are horizontally or vertically neighboring. The same letter cell may not be used more than once in a word.
 
 
-**Example:** 
+**Example 1:** 
+![212_search1](./img/212_search1.jpg)
 ```
-Input: 
-board = [
-  ['o','a','a','n'],
-  ['e','t','a','e'],
-  ['i','h','k','r'],
-  ['i','f','l','v']
-]
-words = ["oath","pea","eat","rain"]
-
+Input: board = [["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]], words = ["oath","pea","eat","rain"]
 Output: ["eat","oath"]
 ```
 
-**Note:** 
-    - All inputs are consist of lowercase letters `a-z`.
-    - The values of `words` are distinct.
+**Example 2:** 
+![212_search2](./img/212_search2.jpg)
+```
+Input: board = [["a","b"],["c","d"]], words = ["abcb"]
+Output: []
+```
+
+**Constraints:** 
+    - `m == board.length` 
+    - `n == board[i].length` 
+    - `1 <= m, n <= 12` 
+    - `board[i][j]` is a lowercase English letter.
+    - `1 <= words.length <= 3 * 10^4` 
+    - `1 <= words[i].length <= 10` 
+    - `words[i]` consists of lowercase English letters.
+    - All the strings of `words` are unique.
 
 **Hint #1** 
 You would need to optimize your backtracking to pass the larger test. Could you stop backtracking earlier?
@@ -35,77 +41,49 @@ If the current candidate does not exist in all words' prefix, you could stop bac
 # Reference: https://leetcode.com/problems/word-search-ii/discuss/712733/Python-Trie-solution-with-dfs-explained
 
 from typing import List
-
-class Trie:
-    def __init__(self):
-        """
-        Initialize your data structure here.
-        """
-        self.tree = {}
-        self.null = '\0'
-
-    def insert(self, word: str) -> None:
-        """
-        Inserts a word into the trie.
-        """
-        tree = self.tree
-        for c in word:
-            if c not in tree:
-                tree[c] = {}
-            tree = tree[c]
-        tree[self.null] = {}
-
-    def search(self, word: str) -> bool:
-        """
-        Returns if the word is in the trie.
-        """
-        tree = self.tree
-        for c in word:
-            if c not in tree:
-                return False
-            tree = tree[c]
-        if self.null not in tree:
-            return False
-        return True
-
-    def startsWith(self, prefix: str) -> bool:
-        """
-        Returns if there is any word in the trie that starts with the given prefix.
-        """
-        tree = self.tree
-        for c in prefix:
-            if c not in tree:
-                return False
-            tree = tree[c]
-        return True
+from collections import defaultdict
 
 class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
-        visited, tree, ans = [[False] * len(board[0]) for _ in board], Trie(), []
+        m, n = len(board), len(board[0])
+        visited = [[False] * n for _ in range(m)]
+        ans = set()
 
         # Build a prefix tree
-        for w in words:
-            tree.insert(w)
+        prefix_tree = {}
+        for word in words:
+            tree = prefix_tree
+            for c in word:
+                if c not in tree:
+                    tree[c] = {}
+                tree = tree[c]
+            tree['\0'] = {}
 
         # Define DFS
-        def dfs(x, y, prefix):
-            if x < 0 or x >= len(board) or y < 0 or y >= len(board[0]):
-                return
-            if tree.startsWith(prefix) and not visited[x][y]:
-                prefix += board[x][y]
-                visited[x][y] = True
-                if tree.search(prefix) and prefix not in ans:
-                    ans.append(prefix)
-                for i, j in [[0, 1], [0, -1], [1, 0], [-1, 0]]:
-                    dfs(x + i, y + j, prefix)
-                visited[x][y] = False
+        def dfs(x, y, tree, prefix):
+            visited[x][y] = True
+            if '\0' in tree:
+                ans.add("".join(prefix))
+            for dx, dy in [[0, 1], [0, -1], [1, 0], [-1, 0]]:
+                if 0 <= x + dx < m and 0 <= y + dy < n \
+                        and board[x + dx][y + dy] in tree \
+                        and not visited[x + dx][y + dy]:
+                    dfs(
+                        x + dx, y + dy, 
+                        tree[board[x + dx][y + dy]], 
+                        prefix + [board[x + dx][y + dy]]
+                    )
+            visited[x][y] = False
 
         # Run DFS for every letter on the board
         for i in range(len(board)):
             for j in range(len(board[0])):
-                dfs(i, j, "")
-        return ans
+                if board[i][j] in prefix_tree:
+                    dfs(i, j, prefix_tree[board[i][j]], [board[i][j]])
+        return list(ans)
 
+
+# ['oath', 'eat']
 print(Solution().findWords([
     ['o', 'a', 'a', 'n'], 
     ['e', 't', 'a', 'e'], 
@@ -113,6 +91,59 @@ print(Solution().findWords([
     ['i', 'f', 'l', 'v']
 ], ["oath", "pea", "eat", "rain"]))
 
+
+# []
+print(Solution().findWords([
+    ["a", "b"], 
+    ["c", "d"]
+], ["abcb"]))
+
+
+# ['a']
 print(Solution().findWords([
     ['a', 'a']
 ], ["a"]))
+
+
+# ['oaa', 'oa']
+print(Solution().findWords([
+    ['o', 'a', 'b', 'n'], 
+    ['o', 't', 'a', 'e'], 
+    ['a', 'h', 'k', 'r'], 
+    ['a', 'f', 'l', 'v']
+], ["oa", "oaa"]))
+
+
+# ['oath', 'eat', 'hklf', 'hf']
+print(Solution().findWords([
+    ['o', 'a', 'a', 'n'], 
+    ['e', 't', 'a', 'e'], 
+    ['i', 'h', 'k', 'r'], 
+    ['i', 'f', 'l', 'v']
+], ['oath', 'pea', 'eat', 'rain', 'hklf', 'hf']))
+
+
+# ['befa', 'eaabcdgfa', 'gfedcbaaa', 'abcdefg']
+print(Solution().findWords([
+    ['a', 'b', 'c'], 
+    ['a', 'e', 'd'], 
+    ['a', 'f', 'g']
+], ['abcdefg', 'gfedcbaaa', 'eaabcdgfa', 'befa', 'dgc', 'ade']))
+
+
+# ['aaaaaaaaa', 'a', 'aaaaa', 'aa', 'aaaaaaaa', 'aaa', 'aaaaaa', 'aaaaaaaaaa', 'aaaa', 'aaaaaaa']
+print(Solution().findWords([
+    ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'], 
+    ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'], 
+    ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'], 
+    ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'], 
+    ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'], 
+    ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'], 
+    ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'], 
+    ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'], 
+    ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'], 
+    ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'], 
+    ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'], 
+    ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a']
+], ['a', 'aa', 'aaa', 'aaaa', 'aaaaa', 'aaaaaa', 'aaaaaaa', 'aaaaaaaa', 'aaaaaaaaa', 'aaaaaaaaaa']))
+
