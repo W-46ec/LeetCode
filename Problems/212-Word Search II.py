@@ -47,7 +47,7 @@ class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
         m, n = len(board), len(board[0])
         visited = [[False] * n for _ in range(m)]
-        ans = set()
+        ans = []
 
         # Build a prefix tree
         prefix_tree = {}
@@ -63,7 +63,8 @@ class Solution:
         def dfs(x, y, tree, prefix):
             visited[x][y] = True
             if '\0' in tree:
-                ans.add("".join(prefix))
+                tree.pop('\0')
+                ans.append(prefix)
             for dx, dy in [[0, 1], [0, -1], [1, 0], [-1, 0]]:
                 if 0 <= x + dx < m and 0 <= y + dy < n \
                         and board[x + dx][y + dy] in tree \
@@ -71,16 +72,16 @@ class Solution:
                     dfs(
                         x + dx, y + dy, 
                         tree[board[x + dx][y + dy]], 
-                        prefix + [board[x + dx][y + dy]]
+                        prefix + board[x + dx][y + dy]
                     )
             visited[x][y] = False
 
         # Run DFS for every letter on the board
-        for i in range(len(board)):
-            for j in range(len(board[0])):
-                if board[i][j] in prefix_tree:
-                    dfs(i, j, prefix_tree[board[i][j]], [board[i][j]])
-        return list(ans)
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] in prefix_tree and len(ans) < len(words):
+                    dfs(i, j, prefix_tree[board[i][j]], board[i][j])
+        return ans
 
 
 # ['oath', 'eat']
@@ -105,7 +106,7 @@ print(Solution().findWords([
 ], ["a"]))
 
 
-# ['oaa', 'oa']
+# ['oa', 'oaa']
 print(Solution().findWords([
     ['o', 'a', 'b', 'n'], 
     ['o', 't', 'a', 'e'], 
@@ -123,7 +124,7 @@ print(Solution().findWords([
 ], ['oath', 'pea', 'eat', 'rain', 'hklf', 'hf']))
 
 
-# ['befa', 'eaabcdgfa', 'gfedcbaaa', 'abcdefg']
+# ['abcdefg', 'befa', 'eaabcdgfa', 'gfedcbaaa']
 print(Solution().findWords([
     ['a', 'b', 'c'], 
     ['a', 'e', 'd'], 
@@ -131,7 +132,7 @@ print(Solution().findWords([
 ], ['abcdefg', 'gfedcbaaa', 'eaabcdgfa', 'befa', 'dgc', 'ade']))
 
 
-# ['aaaaaaaaa', 'a', 'aaaaa', 'aa', 'aaaaaaaa', 'aaa', 'aaaaaa', 'aaaaaaaaaa', 'aaaa', 'aaaaaaa']
+# ['a', 'aa', 'aaa', 'aaaa', 'aaaaa', 'aaaaaa', 'aaaaaaa', 'aaaaaaaa', 'aaaaaaaaa', 'aaaaaaaaaa']
 print(Solution().findWords([
     ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'], 
     ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'], 
