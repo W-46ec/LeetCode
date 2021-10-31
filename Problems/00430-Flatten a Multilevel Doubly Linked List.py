@@ -14,10 +14,9 @@ Output: [1,2,3,7,8,11,12,9,10,4,5,6]
 Explanation:
 
 The multilevel linked list in the input is as follows:
-![10_multilevellinkedlist](./img/10_multilevellinkedlist.png)
-
+![430_multilevellinkedlist](./img/430_multilevellinkedlist.png)
 After flattening the multilevel linked list it becomes:
-![10_multilevellinkedlistflattened](./img/10_multilevellinkedlistflattened.png)
+![430_multilevellinkedlistflattened](./img/430_multilevellinkedlistflattened.png)
 ```
 
 **Example 2:** 
@@ -49,28 +48,25 @@ We use the multilevel linked list from **Example 1** above:
              |
              11--12--NULL
 ```
-
 The serialization of each level is as follows:
 ```
 [1,2,3,4,5,6,null]
 [7,8,9,10,null]
 [11,12,null]
 ```
-
 To serialize all levels together we will add nulls in each level to signify no node connects to the upper node of the previous level. The serialization becomes:
 ```
 [1,2,3,4,5,6,null]
 [null,null,7,8,9,10,null]
 [null,11,12,null]
 ```
-
 Merging the serialization of each level and removing trailing nulls we obtain:
 ```
 [1,2,3,4,5,6,null,null,null,7,8,9,10,null,null,11,12]
 ```
 
 **Constraints:** 
-    - Number of Nodes will not exceed 1000.
+    - The number of Nodes will not exceed `1000`.
     - `1 <= Node.val <= 10^5` 
 """
 
@@ -92,7 +88,7 @@ class Solution:
             node = stack.pop()
             if prev:
                 prev.next = node
-                prev.next.prev = prev
+                node.prev = prev
             prev = node
             if node.next:
                 stack.append(node.next)
