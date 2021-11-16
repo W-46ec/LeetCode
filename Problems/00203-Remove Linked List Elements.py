@@ -6,7 +6,7 @@ Given the `head` of a linked list and an integer `val`, remove all the nodes of 
 
 
 **Example 1:** 
-
+![203_removelinked-list](./img/203_removelinked-list.jpg)
 ```
 Input: head = [1,2,6,3,4,5,6], val = 6
 Output: [1,2,3,4,5]
