@@ -2,14 +2,36 @@
 """
 # Remove Linked List Elements
 
-Remove all elements from a linked list of integers that have value **val**.
+Given the `head` of a linked list and an integer `val`, remove all the nodes of the linked list that has `Node.val == val`, and return *the new head*.
 
-**Example:** 
+
+**Example 1:** 
+
 ```
-Input:  1->2->6->3->4->5->6, val = 6
-Output: 1->2->3->4->5
+Input: head = [1,2,6,3,4,5,6], val = 6
+Output: [1,2,3,4,5]
 ```
+
+**Example 2:** 
+```
+Input: head = [], val = 1
+Output: []
+```
+
+**Example 3:** 
+```
+Input: head = [7,7,7,7], val = 7
+Output: []
+```
+
+**Constraints:** 
+    - The number of nodes in the list is in the range `[0, 10^4]`.
+    - `1 <= Node.val <= 50` 
+    - `0 <= val <= 50` 
 """
+
+import sys
+sys.path += ['.', '../', '../../']
 
 from util import ListNode, initList, printList
 
@@ -21,21 +43,24 @@ from util import ListNode, initList, printList
 
 class Solution:
     def removeElements(self, head: ListNode, val: int) -> ListNode:
-        prev, curr = None, head
+        dummy_head = ListNode(0, head)
+        prev, curr = dummy_head, head
         while curr:
             if curr.val == val:
-                if curr == head:
-                    head = head.next
-                    prev, curr = None, head
-                    continue
-                prev.next = curr.next
-                curr = curr.next
-                continue
-            prev, curr = curr, curr.next
-        return head
+                curr = prev.next = curr.next
+            else:
+                prev, curr = curr, curr.next
+        return dummy_head.next
 
+# 1 -> 2 -> 3 -> 4 -> 5 -> NULL
 printList(Solution().removeElements(initList([1, 2, 6, 3, 4, 5, 6]), 6))    # 1 -> 2 -> 3 -> 4 -> 5
+
+# NULL
 printList(Solution().removeElements(initList([6, 6, 6]), 6))                # (None)
+
+# NULL
 printList(Solution().removeElements(initList([1]), 1))                      # (None)
+
+# 1 -> 1 -> NULL
 printList(Solution().removeElements(initList([1, 2, 2, 1]), 2))             # 1 -> 1
 
