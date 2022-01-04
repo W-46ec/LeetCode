@@ -2,8 +2,11 @@
 """
 # Number Complement
 
-Given a **positive** integer `num`, output its complement number. The complement strategy is to flip the bits of its binary representation.
+The **complement** of an integer is the integer you get when you flip all the `0`'s to `1`'s and all the `1`'s to `0`'s in its binary representation.
 
+    - For example, The integer `5` is `"101"` in binary and its **complement** is `"010"` which is the integer `2`.
+
+Given an integer `n`, return *its complement*.
 
 **Example 1:** 
 ```
@@ -20,27 +23,24 @@ Explanation: The binary representation of 1 is 1 (no leading zero bits), and its
 ```
 
 **Constraints:** 
-    - The given integer `num` is guaranteed to fit within the range of a 32-bit signed integer.
-    - `num >= 1` 
-    - You could assume no leading zero bit in the integer’s binary representation.
-    - This question is the same as 1009: [https://leetcode.com/problems/complement-of-base-10-integer/](https://leetcode.com/problems/complement-of-base-10-integer/)
+    - `1 <= num < 2^31` 
+
+**Note**: This question is the same as 1009: [https://leetcode.com/problems/complement-of-base-10-integer/](https://leetcode.com/problems/complement-of-base-10-integer/) 
 """
 
 class Solution:
     def findComplement(self, num: int) -> int:
         if num == 0:
             return 1
-        ans, bit = 0, 0
+        mask, neg_n = 0, ~num
         while num:
-            if num & 0x1 == 0:
-                ans |= 1 << bit
-            bit += 1
+            mask = (mask << 1) + 1
             num >>= 1
-        return ans
+        return mask & neg_n
 
 testcases = [5, 1, 7, 8, 0, 2]
 
-# 2 0 0 7 1 1
+# Correct answers: 2 0 0 7 1 1
 for x in testcases:
     print(Solution().findComplement(x), end = ' ')
 print()
