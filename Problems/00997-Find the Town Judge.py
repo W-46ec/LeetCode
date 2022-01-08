@@ -2,76 +2,79 @@
 """
 # Find the Town Judge
 
-In a town, there are `N` people labelled from `1` to `N`. There is a rumor that one of these people is secretly the town judge.
+In a town, there are `n` people labeled from `1` to `n`. There is a rumor that one of these people is secretly the town judge.
 
 If the town judge exists, then:
     1. The town judge trusts nobody.
     2. Everybody (except for the town judge) trusts the town judge.
     3. There is exactly one person that satisfies properties 1 and 2.
 
-You are given `trust`, an array of pairs `trust[i] = [a, b]` representing that the person labelled `a` trusts the person labelled `b`.
+You are given an array `trust` where `trust[i] = [a_i, b_i]` representing that the person labeled `a_i` trusts the person labeled `b_i`.
 
-If the town judge exists and can be identified, return the label of the town judge.  Otherwise, return `-1`.
+Return *the label of the town judge if the town judge exists and can be identified, or return `-1` otherwise*.
 
 
 **Example 1:** 
 ```
-Input: N = 2, trust = [[1,2]]
+Input: n = 2, trust = [[1,2]]
 Output: 2
 ```
 
 **Example 2:** 
 ```
-Input: N = 3, trust = [[1,3],[2,3]]
+Input: n = 3, trust = [[1,3],[2,3]]
 Output: 3
 ```
 
 **Example 3:** 
 ```
-Input: N = 3, trust = [[1,3],[2,3],[3,1]]
+Input: n = 3, trust = [[1,3],[2,3],[3,1]]
 Output: -1
 ```
 
-**Example 4:** 
-```
-Input: N = 3, trust = [[1,2],[2,3]]
-Output: -1
-```
-
-**Example 5:** 
-```
-Input: N = 4, trust = [[1,3],[1,4],[2,3],[2,4],[4,3]]
-Output: 3
-```
-
-Note:
-    1. `1 <= N <= 1000` 
-    2. `trust.length <= 10000` 
-    3. `trust[i]` are all different
-    4. `trust[i][0] != trust[i][1]` 
-    5. `1 <= trust[i][0], trust[i][1] <= N` 
+**Constraints:** 
+    - `1 <= n <= 1000` 
+    - `0 <= trust.length <= 10^4` 
+    - `trust[i].length == 2` 
+    - All the pairs of trust are **unique**.
+    - `a_i != b_i` 
+    - `1 <= a_i, b_i <= n` 
 """
 
 from typing import List
+from collections import defaultdict
 
 class Solution:
     def findJudge(self, N: int, trust: List[List[int]]) -> int:
-        if N <= 1:
+        # Special case: There's only one person -- the judge
+        if N == 1:
             return 1
-        lst = [x for x in range(1, N + 1)]
-        d = {}
+        
+        # inbound_deg[k] -- The number of nodes that are pointing to k
+        # outbound_deg[k] -- The number of nodes that k is pointing to
+        inbound_deg = defaultdict(int)
+        outbound_deg = defaultdict(int)
+        
+        # Find the in/outbound degree for each node
         for a, b in trust:
-            lst[a - 1] = -1
-            if b not in d:
-                d[b] = set()
-            d[b].add(a)
-        for i in range(len(lst)):
-            if lst[i] != -1:
-                if lst[i] in d and len(d[lst[i]]) == N - 1:
-                    return lst[i]
+            inbound_deg[b] += 1
+            outbound_deg[a] += 1
+        
+        # Find the node with inbound degree equal to N - 1
+        # and outbound degree equal to 0
+        for k in inbound_deg:
+            if inbound_deg[k] == N - 1 and outbound_deg[k] == 0:
+                return k
         return -1
 
-print(Solution().findJudge(2, [[1, 2]]))                    # 2
-print(Solution().findJudge(3, [[1, 3], [2, 3]]))            # 3
-print(Solution().findJudge(3, [[1, 3], [2, 3], [3, 1]]))    # -1
-print(Solution().findJudge(1, []))                          # 1
+# 2
+print(Solution().findJudge(2, [[1, 2]]))
+
+# 3
+print(Solution().findJudge(3, [[1, 3], [2, 3]]))
+
+# -1
+print(Solution().findJudge(3, [[1, 3], [2, 3], [3, 1]]))
+
+# 1
+print(Solution().findJudge(1, []))
