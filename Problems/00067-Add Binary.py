@@ -2,9 +2,8 @@
 """
 # Add Binary
 
-Given two binary strings, return their sum (also a binary string).
+Given two binary strings `a` and `b`, return *their sum as a binary string*.
 
-The input strings are both **non-empty** and contains only characters `1` or `0`.
 
 **Example 1:** 
 ```
@@ -18,16 +17,44 @@ Input: a = "1010", b = "1011"
 Output: "10101"
 ```
 
-**Constraints:** `
-    - Each string consists only of `'0'` or `'1'` characters.
+**Constraints:** 
     - `1 <= a.length, b.length <= 10^4` 
-    - Each string is either `"0"` or doesn't contain any leading zero.
+    - `a` and `b` consist only of `'0'` or `'1'` characters.
+    - Each string does not contain leading zeros except for the zero itself.
 """
 
 class Solution:
     def addBinary(self, a: str, b: str) -> str:
-        return bin(int(a, base = 2) + int(b, base = 2))[2 : ]
+        # # Built-in function: Convert to bin type
+        # return bin(int(a, base = 2) + int(b, base = 2))[2 : ]
 
-print(Solution().addBinary("11", "1"))          # "100"
-print(Solution().addBinary("1010", "1011"))     # "10101"
+        # # Compute bit by bit
+
+        # Addition table
+        add_op = {
+            '0': { '0': '0', '1': '1' }, 
+            '1': { '0': '1', '1': '0' }
+        }
+
+        # Add preceding zeros to make it easier to deal with
+        length = max(len(a), len(b))
+        a, b = a.zfill(length), b.zfill(length)
+
+        # Current carry bit is 0
+        carry, res = '0', ''
+        for i in range(length - 1, -1, -1):
+            resulting_bit = add_op[add_op[a[i]][b[i]]][carry]
+            # Update the next carry bit
+            if a[i] == b[i] == '1' or add_op[a[i]][b[i]] == carry == '1':
+                carry = '1'
+            else:
+                carry = '0'
+            res = resulting_bit + res
+        return res if carry == '0' else carry + res
+
+# "100"
+print(Solution().addBinary("11", "1"))
+
+# "10101"
+print(Solution().addBinary("1010", "1011"))
 
