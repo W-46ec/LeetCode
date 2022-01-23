@@ -55,18 +55,49 @@ Explanation: Alice can't win the game if Bob plays optimally.
 Use dynamic programming to keep track of winning and losing states. Given some number of stones, Alice can win if she can force Bob onto a losing state.
 """
 
-# Reference: https://leetcode.com/problems/stone-game-iv/solution/
-
 class Solution:
     def winnerSquareGame(self, n: int) -> bool:
-        # dp[i] <- Whether or not Alice can win with i stones in the pile
-        dp = [False] * (n + 1)
-        for i in range(1, n + 1):
-            # Check all the square numbers that are <= i, 
-            # If we can find any k such that dp[i - k * k] is False (must-lose), 
-            # then Alice can simply take k * k stones from the pile, 
-            # and force Bob onto a losing state.
-            dp[i] = True if any([dp[i - k * k] == False for k in range(1, int(i ** 0.5) + 1)]) else False
+        # Define a square number generator
+        # i.e., 1, 4, 9, 16, ...
+        def sqr_num():
+            i = 1
+            while True:
+                yield i ** 2
+                i += 1
+        
+        # dp[i] <- Whether or not Alice has a winning strategy
+        #          if she starts with i stones
+        # i = 1, 2, 3, ..., n
+        dp = [True] * (n + 1)
+        
+        # Build the solution bottom-up
+        for i in range(2, n + 1):
+            # The set of all possible moves
+            sqr_num_gen = sqr_num()
+            
+            # Get the set of all legal moves, starting from 1
+            legal_move = next(sqr_num_gen)
+            # Whether or not Alice has winning strategy
+            has_win_strategy = False
+            # Try all possible moves to find one that
+            # results in a wining state.
+            while legal_move <= i:
+                # If i is a square number, Alice wins
+                if legal_move == i:
+                    has_win_strategy = True
+                # To win the game, we need to take a square number 
+                # of stones (i.e., legal_move stomes) away such that
+                # the remaining number of stones will lead to a
+                # losing state (i.e., dp[i - legal_move] is False).
+                # That way, we are forcing our opponent (i.e., Bob)
+                # into a losing state.
+                elif dp[i - legal_move] == False:
+                    has_win_strategy = True
+                    break
+                legal_move = next(sqr_num_gen)
+            dp[i] = has_win_strategy
+        
+        # Solution
         return dp[n]
 
 
