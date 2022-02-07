@@ -43,31 +43,17 @@ from util import ListNode, initList, printList
 
 class Solution:
     def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
-        if not l1:
-                return l2
-        if not l2:
-            return l1
-        head, tail = None, None
+        prev = dummy_head = ListNode()
         while l1 and l2:
-            if l1.val < l2.val:
-                if not tail:
-                    tail, l1 = l1, l1.next
-                    head = tail
-                else:
-                    tail.next, l1 = l1, l1.next
-                    tail = tail.next
+            if l1.val <= l2.val:
+                prev.next = l1
+                l1 = l1.next
             else:
-                if not tail:
-                    tail, l2 = l2, l2.next
-                    head = tail
-                else:
-                    tail.next, l2 = l2, l2.next
-                    tail = tail.next
-        if l1:
-            tail.next = l1
-        elif l2:
-            tail.next = l2
-        return head
+                prev.next = l2
+                l2 = l2.next
+            prev = prev.next
+        prev.next = l1 if l1 else l2
+        return dummy_head.next
 
 # 1 -> 1 -> 2 -> 3 -> 4 -> 4 -> NULL
 printList(Solution().mergeTwoLists(initList([1, 2, 4]), initList([1, 3, 4])))
