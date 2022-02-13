@@ -2,62 +2,73 @@
 """
 # Permutation in String
 
-Given two strings **s1** and **s2**, write a function to return true if **s2** contains the permutation of **s1**. In other words, one of the first string's permutations is the **substring** of the second string.
+Given two strings `s1` and `s2`, return *`true` if `s2` contains a permutation of `s1`, or `false` otherwise*.
+
+In other words, return `true` if one of `s1`'s permutations is the substring of `s2`.
 
 
 **Example 1:** 
 ```
-Input: s1 = "ab" s2 = "eidbaooo"
-Output: True
+Input: s1 = "ab", s2 = "eidbaooo"
+Output: true
 Explanation: s2 contains one permutation of s1 ("ba").
 ```
 
 **Example 2:** 
 ```
-Input:s1= "ab" s2 = "eidboaoo"
-Output: False
+Input: s1 = "ab", s2 = "eidboaoo"
+Output: false
 ```
 
-**Note:** 
-    1. The input strings only contain lower case letters.
-    2. The length of both given strings is in range [1, 10,000].
+**Constraints:** 
+    - `1 <= s1.length, s2.length <= 10^4` 
+    - `s1` and `s2` consist of lowercase English letters.
 """
 
-
-from collections import OrderedDict
+from collections import Counter
 
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
-        if len(s2) < len(s1):
-            return False
-        map_s1, map_s2 = OrderedDict(), OrderedDict()
-        slice2 = s2[ : len(s1)]
-        for i in range(len(s1)):
-            map_s1[s1[i]] = s1.count(s1[i])
-            map_s2[s2[i]] = slice2.count(s2[i])
-        i = 0
-        while i < len(s2) - len(s1) + 1:
-            if i != 0:
-                if s2[i + len(s1) - 1] in map_s2:
-                    map_s2[s2[i + len(s1) - 1]] += 1
-                else:
-                    map_s2[s2[i + len(s1) - 1]] = 1
-            equal = True
-            for k in map_s1:
-                if k not in map_s2 or map_s1[k] != map_s2[k]:
-                    equal = False
-                    break
-            if equal:
+        """Sliding window"""
+        
+        # The frequency table for s1.
+        # We need to find a substring in s2 with the same 
+        # character frequencies as that of s1.
+        freq = Counter(s1)
+        
+        # Move the window from left to right
+        for i, c in enumerate(s2):
+            # When a character is being popped out from the window,
+            # increase the freq by 1, meaning that the need for that
+            # character is increased.
+            if i - len(s1) >= 0:
+                freq[s2[i - len(s1)]] += 1
+            
+            # When a new character is added to the window, decrease
+            # the corresponding freq by 1, meaning that the need for
+            # that character is decreased.
+            freq[c] -= 1
+            
+            # At any point, if all the values in the freq table
+            # become 0, it means the substring corresponding to the
+            # current window has the same character frequencies with s1.
+            # Therefore, we can return True immediately.
+            if not any(freq.values()):
                 return True
-            if map_s2[s2[i]] > 1:
-                map_s2[s2[i]] -= 1
-            else:
-                map_s2.pop(s2[i])
-            i += 1
+        
+        # We cannot find a substring in s2 with the same 
+        # character frequencies as that of s1.
         return False
 
+# True
 print(Solution().checkInclusion("ab", "eidbaooo"))
+
+# False
 print(Solution().checkInclusion("ab", "eidboaoo"))
+
+# True
 print(Solution().checkInclusion("adc", "dcda"))
+
+# True
 print(Solution().checkInclusion("trinitrophenylmethylnitramine", "dinitrophenylhydrazinetrinitrophenylmethylnitramine"))
 
