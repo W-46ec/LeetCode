@@ -1,31 +1,67 @@
-def isValid(s):
-	"""
-	:type s: str
-	:rtype: bool
-	"""
 
-	lParenthese = []
+"""
+# Valid Parentheses
 
-	parentheseTabel = {
-		'(': ')', 
-		'[': ']', 
-		'{': '}'
-	}
+Given a string `s` containing just the characters `'('`, `')'`, `'{'`, `'}'`, `'['` and `']'`, determine if the input string is valid.
 
-	if len(s) == 0:
-		return True
+An input string is valid if:
+    1. Open brackets must be closed by the same type of brackets.
+    2. Open brackets must be closed in the correct order.
 
-	for i in range(0, len(s)):
-		if s[i] in "([{":
-			lParenthese.append(s[i])
-		elif s[i] in ")]}":
-			if len(lParenthese) == 0:
-				return False
-			if parentheseTabel[lParenthese.pop(len(lParenthese) - 1)] != s[i]:
-				return False
-	if len(lParenthese) != 0:
-		return False
+**Example 1:** 
+```
+Input: s = "()"
+Output: true
+```
 
-	return True
+**Example 2:** 
+```
+Input: s = "()[]{}"
+Output: true
+```
 
-print(isValid("["))
+**Example 3:** 
+```
+Input: s = "(]"
+Output: false
+```
+
+**Constraints:** 
+    - `1 <= s.length <= 10^4` 
+    - `s` consists of parentheses only `'()[]{}'`.
+"""
+
+class Solution:
+    def isValid(self, s: str) -> bool:
+        stack = []
+        parentheses_map = {
+            '(': ')', 
+            '{': '}', 
+            '[': ']'
+        }
+        for c in s:
+            if c in parentheses_map:
+                stack += [c]
+            else:
+                if not stack or c != parentheses_map[stack.pop()]:
+                    return False
+        return True if not stack else False
+
+testcases = [
+    "()", 
+    "()[]{}", 
+    "(]", 
+    "[", 
+    ")))", 
+]
+
+
+# True
+# True
+# False
+# False
+# False
+for test in testcases:
+    print(Solution().isValid(test))
+
+
