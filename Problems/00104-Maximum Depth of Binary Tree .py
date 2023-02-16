@@ -45,15 +45,28 @@ Output: 1
 #         self.right = right
 
 import sys
-sys.path  = sys.path = ['.', '../', '../../'] + sys.path
+sys.path += ['.', '../', '../../']
 
+from typing import Optional
 from util import TreeNode, deserializeTree
 
 class Solution:
-    def maxDepth(self, root: TreeNode) -> int:
-        if not root:
-            return 0
-        return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        # # Recursive approach
+        # if not root:
+        #     return 0
+        # return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
+
+        # Non-recursive approach -- DFS
+        max_depth = 0
+        stack = [(root, 1)] if root else []
+        while stack:
+            node, depth = stack.pop()
+            max_depth = max(max_depth, depth)
+            stack += [(node.left, depth + 1)] if node.left else []
+            stack += [(node.right, depth + 1)] if node.right else []
+        return max_depth
+
 
 # 3
 print(Solution().maxDepth(deserializeTree("[3, 9, 20, null, null, 15, 7]")))
