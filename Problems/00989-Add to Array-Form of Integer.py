@@ -42,11 +42,48 @@ from math import log10, floor
 
 class Solution:
     def addToArrayForm(self, num: List[int], k: int) -> List[int]:
-        # Approach 1
-        # Convert to int and do addition -- list comprehension
-        # Short, but slow -- TLE
-        k += sum([num[i] * 10 ** (len(num) - i - 1) for i in range(len(num))])
-        return [(k // 10 ** (floor(log10(k)) - i)) % 10 for i in range(floor(log10(k)) + 1)]
+        # # Approach 1
+        # # Convert to int and do addition -- list comprehension
+        # # Short, but slow -- TLE
+        # k += sum([num[i] * 10 ** (len(num) - i - 1) for i in range(len(num))])
+        # return [(k // 10 ** (floor(log10(k)) - i)) % 10 for i in range(floor(log10(k)) + 1)]
+
+
+        # # Approach 2
+        # # Convert to int and do addition -- loop
+        # # Accepted, but still very slow
+        # res = []
+        # for i, x in enumerate(num):
+        #     k += x * 10 ** (len(num) - i - 1)
+        # while k:
+        #     res = [k % 10] + res
+        #     k //= 10
+        # return res
+
+
+        # # Approach 3
+        # # Use string operations -- Accepted, and fast
+        # # 1. Convert each digit in num to char
+        # # 2. Concatenate all characters into a string
+        # # 3. Convert string to int and add k to it
+        # # 4. Convert the sum to string and split it into a list of characters
+        # # 5. Convert all characters back to int (digit)
+        # return map(int, list(str(int("".join(map(str, num))) + k)))
+
+
+        # Approach 4
+        # Implement the addition algorithm
+        carry, pos = 0, len(num) - 1
+        while carry or k:
+            tmp_res = (num[pos] if pos >= 0 else 0) + (k % 10) + carry
+            carry = tmp_res // 10
+            if pos >= 0:
+                num[pos] = tmp_res % 10
+            else:
+                num = [tmp_res % 10] + num
+            pos -= 1
+            k //= 10
+        return num
 
 
 # [1, 2, 3, 4]
