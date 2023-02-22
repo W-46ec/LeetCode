@@ -2,30 +2,38 @@
 """
 # Binary Tree Zigzag Level Order Traversal
 
-Given a binary tree, return the *zigzag level order* traversal of its nodes' values. (ie, from left to right, then right to left for the next level and alternate between).
+Given the `root` of a binary tree, return *the zigzag level order traversal of its nodes' values*. (i.e., from left to right, then right to left for the next level and alternate between).
 
-For example:
-Given binary tree `[3,9,20,null,null,15,7]`,
+
+**Example 1:** 
+![103_tree1](./img/103_tree1.jpg)
 ```
-    3
-   / \
-  9  20
-    /  \
-   15   7
+Input: root = [3,9,20,null,null,15,7]
+Output: [[3],[20,9],[15,7]]
 ```
 
-return its zigzag level order traversal as:
+**Example 2:** 
 ```
-[
-  [3],
-  [20,9],
-  [15,7]
-]
+Input: root = [1]
+Output: [[1]]
 ```
+
+**Example 3:** 
+```
+Input: root = []
+Output: []
+```
+
+**Constraints:** 
+    - The number of nodes in the tree is in the range `[0, 2000]`.
+    - `-100 <= Node.val <= 100` 
 """
 
-from typing import List
-from util import TreeNode, initTree
+import sys
+sys.path += ['.', '../', '../../'] 
+
+from typing import List, Optional
+from util import TreeNode, deserializeTree
 
 # Definition for a binary tree node.
 # class TreeNode:
@@ -35,7 +43,25 @@ from util import TreeNode, initTree
 #         self.right = right
 
 class Solution:
-    def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
+    def zigzagLevelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        # # O(2N)
+        # if not root:
+        #     return []
+
+        # queue = [(0, root)]
+        # for level, node in queue:
+        #     queue += [(level + 1, node.left)] if node.left else []
+        #     queue += [(level + 1, node.right)] if node.right else []
+
+        # ans = [[] for _ in range(queue[-1][0] + 1)]
+        # for level, node in queue:
+        #     if level % 2 == 0:
+        #         ans[level] += [node.val]
+        #     else:
+        #         ans[level] = [node.val] + ans[level]
+        # return ans
+
+        # O(N)
         if not root:
             return []
         queue, ans = [(root, 0)], []
@@ -46,7 +72,7 @@ class Solution:
                     ans[level].append(node.val)
                 else:               # right to left
                     ans[level] = [node.val] + ans[level]
-            else:   # New level
+            else:                   # New level
                 ans.append([node.val])
             queue += [(node.left, level + 1)] if node.left else []
             queue += [(node.right, level + 1)] if node.right else []
@@ -54,5 +80,11 @@ class Solution:
 
 
 # [[3], [20, 9], [15, 7]]
-print(Solution().zigzagLevelOrder(initTree([3, 9, 20, None, None, 15, 7])))
+print(Solution().zigzagLevelOrder(deserializeTree("[3, 9, 20, null, null, 15, 7]")))
+
+# [[1]]
+print(Solution().zigzagLevelOrder(deserializeTree("[1]")))
+
+# []
+print(Solution().zigzagLevelOrder(deserializeTree("[]")))
 
