@@ -46,18 +46,42 @@ from math import floor, log10
 
 class Solution:
     def compress(self, chars: List[str]) -> int:
-        # Accepted, but not constant extra space
-        s, idx = "", 0
-        while idx < len(chars):
-            curr_char, curr_count = chars[idx], 1
-            while idx + curr_count < len(chars) and chars[idx + curr_count] == curr_char:
-                curr_count += 1
-            s += curr_char
-            s += str(curr_count) if curr_count > 1 else ""
-            idx += curr_count
-        chars[ : ] = list(s)
-        return len(s)
+        # # Accepted, but not constant extra space
+        # s, idx = "", 0
+        # while idx < len(chars):
+        #     curr_char, curr_count = chars[idx], 1
+        #     while idx + curr_count < len(chars) and chars[idx + curr_count] == curr_char:
+        #         curr_count += 1
+        #     s += curr_char
+        #     s += str(curr_count) if curr_count > 1 else ""
+        #     idx += curr_count
+        # chars[ : ] = list(s)
+        # return len(s)
 
+        # Accepted & Constant extra space
+        # Let i indicate the position in `chars` where we can write the compressed info to, 
+        #     j indicate the position where all prior chars have been processed.
+        # Note: i is always <= j since the length of the compressed string is always <= that of the decompressed one
+        s, i, j = "", 0, 0
+        while j < len(chars):
+            # Count the number of the current character
+            curr_char, curr_count = chars[j], 1
+            while j + curr_count < len(chars) and chars[j + curr_count] == curr_char:
+                curr_count += 1
+            j += curr_count
+
+            # Append the current character to s
+            chars[i] = curr_char
+            i += 1
+
+            # Append the count digit by digit
+            if curr_count > 1:
+                num_digits = 1 + floor(log10(curr_count))
+                for k in range(num_digits):
+                    chars[i + num_digits - k - 1] = str(curr_count % 10)
+                    curr_count //= 10
+                i += num_digits
+        return i
 
 # 6
 # ["a", "2", "b", "2", "c", "3"]
