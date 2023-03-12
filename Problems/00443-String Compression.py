@@ -83,32 +83,27 @@ class Solution:
                 i += num_digits
         return i
 
-# 6
-# ["a", "2", "b", "2", "c", "3"]
+# 6 ["a", "2", "b", "2", "c", "3"]
 lst = ["a", "a", "b", "b", "c", "c", "c"]
-print(Solution().compress(lst))
-print(lst)
+length = Solution().compress(lst)
+print(length, lst[ : length])
 
-# 1
-# ["a"]
+# 1 ["a"]
 lst = ["a"]
-print(Solution().compress(lst))
-print(lst)
+length = Solution().compress(lst)
+print(length, lst[ : length])
 
-# 4
-# ["a", "b", "1", "2"]
+# 4 ["a", "b", "1", "2"]
 lst = ["a", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b"]
-print(Solution().compress(lst))
-print(lst)
+length = Solution().compress(lst)
+print(length, lst[ : length])
 
-# 3
-# ["a", "1", "0"]
+# 3 ["a", "1", "0"]
 lst = ["a", "a", "a", "a", "a", "a", "a", "a", "a", "a"]
-print(Solution().compress(lst))
-print(lst)
+length = Solution().compress(lst)
+print(length, lst[ : length])
 
-# 6
-# ["a", "3", "b", "2", "a", "2"]
+# 6 ["a", "3", "b", "2", "a", "2"]
 lst = ["a", "a", "a", "b", "b", "a", "a"]
-print(Solution().compress(lst))
-print(lst)
+length = Solution().compress(lst)
+print(length, lst[ : length])
