@@ -42,26 +42,34 @@ from util import ListNode, initList, printList
 #         self.next = next
 
 class Solution:
-    # Iterative approach
+    # # Iterative approach
+    # def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
+    #     # Initialization
+    #     dummy_head, prev, curr = ListNode(0, head), ListNode(0, head), head
+
+    #     while curr:
+    #         nxt = curr.next
+    #         # If the next node is None, it means we have reached the last element of the list
+    #         if nxt:
+    #             # Swap nodes
+    #             prev.next, curr.next, nxt.next = nxt, nxt.next, curr
+    #             # Obtain the head of the new list
+    #             if curr == head:
+    #                 dummy_head.next = nxt
+    #             # Proceed to the next iteration
+    #             prev, curr = curr, curr.next
+    #         else:
+    #             break
+
+    #     return dummy_head.next
+
+    # Recursive approach
     def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        # Initialization
-        dummy_head, prev, curr = ListNode(0, head), ListNode(0, head), head
-
-        while curr:
-            nxt = curr.next
-            # If the next node is None, it means we have reached the last element of the list
-            if nxt:
-                # Swap nodes
-                prev.next, curr.next, nxt.next = nxt, nxt.next, curr
-                # Obtain the head of the new list
-                if curr == head:
-                    dummy_head.next = nxt
-                # Proceed to the next iteration
-                prev, curr = curr, curr.next
-            else:
-                break
-
-        return dummy_head.next
+        if not head or not head.next:
+            return head
+        curr, nxt = head, head.next
+        nxt.next, curr.next = curr, self.swapPairs(nxt.next)
+        return nxt
 
 # NULL
 printList(Solution().swapPairs(initList([])))
