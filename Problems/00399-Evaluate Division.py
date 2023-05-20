@@ -2,9 +2,13 @@
 """
 # Evaluate Division
 
-You are given `equations` in the format `A / B = k`, where `A` and `B` are variables represented as strings, and `k` is a real number (floating-point number). Given some `queries`, return the answers. If the answer does not exist, return `-1.0`.
+You are given an array of variable pairs `equations` and an array of real numbers `values`, where `equations[i] = [Ai, Bi]` and `values[i]` represent the equation `Ai / Bi = values[i]`. Each `Ai` or `Bi` is a string that represents a single variable.
 
-The input is always valid. You may assume that evaluating the queries will result in no division by zero and there is no contradiction.
+You are also given some `queries`, where `queries[j] = [Cj, Dj]` represents the `jth` query where you must find the answer for `Cj / Dj = ?`.
+
+Return *the answers to all queries*. If a single answer cannot be determined, return `-1.0`.
+
+**Note**: The input is always valid. You may assume that evaluating the queries will not result in division by zero and that there is no contradiction.
 
 
 **Example 1:** 
@@ -32,46 +36,48 @@ Output: [0.50000,2.00000,-1.00000,-1.00000]
 **Constraints:** 
     - `1 <= equations.length <= 20` 
     - `equations[i].length == 2` 
-    - `1 <= equations[i][0], equations[i][1] <= 5` 
+    - `1 <= Ai.length, Bi.length <= 5` 
     - `values.length == equations.length` 
     - `0.0 < values[i] <= 20.0` 
     - `1 <= queries.length <= 20` 
     - `queries[i].length == 2` 
-    - `1 <= queries[i][0], queries[i][1] <= 5` 
-    - `equations[i][0], equations[i][1], queries[i][0], queries[i][1]` consist of lower case English letters and digits.
-
-**Hint #1** 
-Do you recognize this as a graph problem?
+    - `1 <= Cj.length, Dj.length <= 5` 
+    - `Ai, Bi, Cj, Dj` consist of lower case English letters and digits.
 """
 
 from typing import List
+from collections import defaultdict
 
 class Solution:
     def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
-        graph = {}
+        # Use an undirected weighted graph to represent the equations
+        # (i.e., graph[u] <- list of nodes that are adjacent of u)
+        graph = defaultdict(list)
         for idx, (x, y) in enumerate(equations):
-            if x in graph:
-                graph[x][y] = values[idx]
-            else:
-                graph[x] = { y: values[idx] }
-            if y in graph:
-                graph[y][x] = 1 / values[idx]
-            else:
-                graph[y] = { x: 1 / values[idx] }
+            graph[x] += [(y, values[idx])]
+            graph[y] += [(x, 1 / values[idx])]
 
-        def graphSearch(graph, visited, x, y, coeff):
-            if x not in graph or visited[x]:
-                return -1.0
-            if y in graph[x]:
-                return coeff * graph[x][y]
-            visited[x] = True
-            for key in graph[x]:
-                res = graphSearch(graph, visited, key, y, graph[x][key])
-                if res != -1.0:
-                    return coeff * res
-            return -1.0
+        # Run BFS to find the answer for each query.
+        # For any query [x, y], if x, y are in the same connected component in the graph, 
+        # the answer can be determined. Otherwise, there is no answer.
+        ans = [-1.0] * len(queries)
+        for idx, (src, dst) in enumerate(queries):
+            # Make sure the variable exists in the graph
+            if src in graph:
+                # BFS
+                queue, visited = [(src, 1)], { k: False for k in graph }
+                visited[src] = True
+                while queue:
+                    node, cumm_weight = queue.pop(0)
+                    if node == dst:
+                        ans[idx] = cumm_weight
+                        break
+                    for neighbor, weight in graph[node]:
+                        if not visited[neighbor]:
+                            queue += [(neighbor, cumm_weight * weight)]
+                            visited[neighbor] = True
 
-        return [graphSearch(graph, {k: False for k in graph}, x, y, 1.0) for x, y in queries]
+        return ans
 
 
 # [6.00000, 0.50000, -1.00000, 1.00000, -1.00000]
