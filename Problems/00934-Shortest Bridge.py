@@ -37,55 +37,44 @@ Output: 1
 """
 
 from typing import List
+from itertools import product
 
 class Solution:
     def shortestBridge(self, grid: List[List[int]]) -> int:
         n = len(grid)
-        done = False
-        for i in range(n):
-            for j in range(n):
-                if grid[i][j] == 1:
-                    done = True
-                    queue = [(i, j)]
-                    visited = [[False] * n for _ in range(n)]
-                    visited[i][j] = True
-                    while queue:
-                        x, y = queue.pop(0)
-                        grid[x][y] = 2
-                        for dx, dy in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
-                            if 0 <= x + dx < n \
-                                    and 0 <= y + dy < n \
-                                    and not visited[x + dx][y + dy] \
-                                    and grid[x + dx][y + dy] == 1:
-                                queue += [(x + dx, y + dy)]
-                                visited[x + dx][y + dy] = True
-                if done:
-                    break
-            if done:
+
+        # Enqueue all cells from one island.
+        # In the meanwhile, turn that island into a group of `2`'s
+        # so that we can differentiate one island from the other.
+        queue = []
+        for i, j in product(range(n), range(n)):
+            if grid[i][j] == 1:
+                queue += [(i, j, 0)]
+                grid[i][j] = 2
+                for x, y, _ in queue:
+                    for dx, dy in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
+                        if 0 <= x + dx < n and 0 <= y + dy < n \
+                                and grid[x + dx][y + dy] == 1:
+                            queue += [(x + dx, y + dy, 0)]
+                            grid[x + dx][y + dy] = 2
                 break
 
+        # Run BFS again to explore the remaining cells of the grid
         ans = float('inf')
-        for i in range(n):
-            for j in range(n):
-                if grid[i][j] == 1:
-                    queue = [(i, j, 0)]
-                    visited = [[False] * n for _ in range(n)]
-                    visited[i][j] = True
-                    while queue:
-                        x, y, dist = queue.pop(0)
-                        if grid[x][y] == 2:
-                            ans = min(ans, dist - 1)
-                            if ans <= 1:
-                                return ans
-                            break
-                        for dx, dy in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
-                            if 0 <= x + dx < n \
-                                    and 0 <= y + dy < n \
-                                    and not visited[x + dx][y + dy] \
-                                    and grid[x + dx][y + dy] != 1:
-                                queue += [(x + dx, y + dy, dist + 1)]
-                                visited[x + dx][y + dy] = True
-
+        while queue:
+            x, y, dist = queue.pop(0)
+            # Reached the other island
+            if grid[x][y] == -1:
+                ans = min(ans, dist - 1)
+                # Early stopping -- the smallest number we can get is 1
+                if ans <= 1:
+                    return ans
+            for dx, dy in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
+                if 0 <= x + dx < n and 0 <= y + dy < n \
+                        and grid[x + dx][y + dy] in [0, 1]:
+                    queue += [(x + dx, y + dy, dist + 1)]
+                    # Minus 2 to mark the cell as visited
+                    grid[x + dx][y + dy] -= 2
         return ans
 
 
