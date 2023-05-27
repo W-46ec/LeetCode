@@ -48,23 +48,34 @@ from typing import List
 
 class Solution:
     def stoneGameIII(self, stoneValue: List[int]) -> str:
-        # Top-down solution
-        soln = [[None] * 4 for _ in range(len(stoneValue))]
-        def solve(all_stone_val, idx = 0):
-            if idx >= len(stoneValue):
-                return 0
-            if soln[idx][0] is None:
-                soln[idx][0], stone_taken_val = float('-inf'), 0
-                for x in range(1, min(4, 1 + len(stoneValue) - idx)):
-                    stone_taken_val += stoneValue[idx + x - 1]
-                    if soln[idx][x] is None:
-                        soln[idx][x] = all_stone_val - solve(all_stone_val - stone_taken_val, idx + x)
-                    soln[idx][0] = max(soln[idx][0], soln[idx][x])
-            return soln[idx][0]
+        # # Top-down solution
+        # soln = [[None] * 4 for _ in range(len(stoneValue))]
+        # def solve(all_stone_val, idx = 0):
+        #     if idx >= len(stoneValue):
+        #         return 0
+        #     if soln[idx][0] is None:
+        #         soln[idx][0], stone_taken_val = float('-inf'), 0
+        #         for x in range(1, min(4, 1 + len(stoneValue) - idx)):
+        #             stone_taken_val += stoneValue[idx + x - 1]
+        #             if soln[idx][x] is None:
+        #                 soln[idx][x] = all_stone_val - solve(all_stone_val - stone_taken_val, idx + x)
+        #             soln[idx][0] = max(soln[idx][0], soln[idx][x])
+        #     return soln[idx][0]
+        # # Scores for Alice and Bob
+        # all_stone_val = sum(stoneValue)
+        # alice_score = solve(all_stone_val)
+        # bob_score = all_stone_val - alice_score
+
+        # Bottom-up solution
+        n = len(stoneValue)
+        soln = [float('-inf')] * n
+        all_stone_val = 0
+        for i in range(n - 1, -1, -1):
+            all_stone_val += stoneValue[i]
+            for j in range(1, 4):
+                soln[i] = max(soln[i], all_stone_val - (soln[i + j] if i + j < n else 0))
         # Scores for Alice and Bob
-        all_stone_val = sum(stoneValue)
-        alice_score = solve(all_stone_val)
-        bob_score = all_stone_val - alice_score
+        alice_score, bob_score = soln[0], all_stone_val - soln[0]
 
         # Return
         if alice_score > bob_score:
