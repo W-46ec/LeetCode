@@ -40,15 +40,27 @@ from typing import List
 
 class Solution:
     def nextGreatestLetter(self, letters: List[str], target: str) -> str:
-        for c in letters:
-            if c > target:
-                return c
-        return letters[0]
+        # # O(n) time
+        # for c in letters:
+        #     if c > target:
+        #         return c
+        # return letters[0]
+
+        # O(log n) time
+        lo, hi = 0, len(letters) - 1
+        while lo <= hi:
+            mid = (lo + hi) // 2
+            if target >= letters[mid]:
+                lo = mid + 1
+            else: # target < letters[mid]
+                hi = mid - 1
+        return letters[lo % len(letters)]
+
 
 # "c"
 print(Solution().nextGreatestLetter(["c", "f", "j"], "a"))
 
-# "c"
+# "f"
 print(Solution().nextGreatestLetter(["c", "f", "j"], "c"))
 
 # "x"
