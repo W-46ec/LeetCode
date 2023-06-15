@@ -43,19 +43,13 @@ from typing import List
 
 class Solution:
     def summaryRanges(self, nums: List[int]) -> List[str]:
-        if len(nums) <= 1:
-            return list(map(str, nums))
-        
-        ans, i = [], 0
+        i, ans = 0, []
         while i < len(nums):
-            lo = i
-            while i < len(nums) - 1 and nums[i] == nums[i + 1] - 1:
-                i += 1
-            if i != lo:
-                ans += ["%d->%d" % (nums[lo], nums[i])]
-            else:
-                ans += [str(nums[i])]
-            i += 1
+            j = i + 1
+            while j < len(nums) and nums[j] == nums[j - 1] + 1:
+                j += 1
+            ans += ["%d->%d" % (nums[i], nums[j - 1])] if i < j - 1 else [str(nums[i])]
+            i = j
         return ans
 
 # ["0->2", "4->5", "7"]
