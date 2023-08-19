@@ -35,31 +35,57 @@ from itertools import product
 
 class Solution:
     def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:
-        # BFS
+        # # BFS
+        # m, n = len(mat), len(mat[0])
+        # dist = [[0] * n for _ in range(m)]
+        # visited = [0] * m
+        # queue = []
+
+        # # Initialization
+        # for i, j in product(range(m), range(n)):
+        #     if mat[i][j] == 1:
+        #         dist[i][j] = float('inf')
+        #     else:
+        #         queue += [(i, j, 0)]
+        #         visited[i] |= 0x1 << j
+
+        # # BFS
+        # while queue:
+        #     x, y, curr_dist = queue.pop(0)
+        #     dist[x][y] = min(dist[x][y], curr_dist)
+        #     for dx, dy in [[0, 1], [0, -1], [1, 0], [-1, 0]]:
+        #         if 0 <= x + dx < m and 0 <= y + dy < n \
+        #                 and visited[x + dx] & 0x1 << (y + dy) == 0 \
+        #                 and curr_dist + 1 < dist[x + dx][y + dy]:
+        #             queue += [(x + dx, y + dy, curr_dist + 1)]
+        #             visited[x + dx] |= 0x1 << (y + dy)
+        # return dist
+
+        # Dynamic programming
+        # Reference: https://leetcode.com/problems/01-matrix/solutions/3921409/most-easy-using-dp-c-runtime-beats-99-16-memory-beats-93-97/
         m, n = len(mat), len(mat[0])
-        dist = [[0] * n for _ in range(m)]
-        visited = [0] * m
-        queue = []
+        dist = [[float('inf')] * n for _ in range(m)]
 
-        # Initialization
         for i, j in product(range(m), range(n)):
-            if mat[i][j] == 1:
-                dist[i][j] = float('inf')
+            if mat[i][j] == 0:
+                dist[i][j] = 0
             else:
-                queue += [(i, j, 0)]
-                visited[i] |= 0x1 << j
+                if 0 < i:
+                    dist[i][j] = min(dist[i][j], 1 + dist[i - 1][j])
+                if 0 < j:
+                    dist[i][j] = min(dist[i][j], 1 + dist[i][j - 1])
 
-        # BFS
-        while queue:
-            x, y, curr_dist = queue.pop(0)
-            dist[x][y] = min(dist[x][y], curr_dist)
-            for dx, dy in [[0, 1], [0, -1], [1, 0], [-1, 0]]:
-                if 0 <= x + dx < m and 0 <= y + dy < n \
-                        and visited[x + dx] & 0x1 << (y + dy) == 0 \
-                        and curr_dist + 1 < dist[x + dx][y + dy]:
-                    queue += [(x + dx, y + dy, curr_dist + 1)]
-                    visited[x + dx] |= 0x1 << (y + dy)
+        for i, j in product(range(m - 1, -1, -1), range(n - 1, -1, -1)):
+            if mat[i][j] == 0:
+                dist[i][j] = 0
+            else:
+                if i < m - 1:
+                    dist[i][j] = min(dist[i][j], 1 + dist[i + 1][j])
+                if j < n - 1:
+                    dist[i][j] = min(dist[i][j], 1 + dist[i][j + 1])
+
         return dist
+
 
 # [[0, 0, 0], [0, 1, 0], [0, 0, 0]]
 print(Solution().updateMatrix([
