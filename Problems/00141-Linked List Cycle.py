@@ -56,14 +56,30 @@ from collections import defaultdict
 
 class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
-        # O(n) space
-        # Keep track of the visited nodes.
-        # Return True if we see a visited node for a second time.
-        visited = defaultdict(int)
-        while head:
-            if visited[head]:
+        # # O(n) space
+        # # Keep track of the visited nodes.
+        # # Return True if we see a visited node for a second time.
+        # visited = defaultdict(int)
+        # while head:
+        #     if visited[head]:
+        #         return True
+        #     visited[head], head = visited[head] + 1, head.next
+        # return False
+
+        # O(1) space
+        # Maintain two pointers 'fast' and 'slow'. The fast pointer
+        # moves two times faster than the slow pointer.
+        # If there exists a cycle, the fast pointer will always 
+        # catch the slow pointer at some point.
+        # If the fast pointer reaches the tail, then no cycles are detected.
+        fast, slow = head, head
+        count = 0
+        while fast:
+            fast = fast.next
+            slow = slow.next if count else slow
+            count = (count + 1) % 2
+            if fast == slow:
                 return True
-            visited[head], head = visited[head] + 1, head.next
         return False
 
 
