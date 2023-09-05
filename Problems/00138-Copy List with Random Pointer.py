@@ -43,6 +43,8 @@ Output: [[3,null],[3,0],[3,null]]
     - `Node.random` is `null` or is pointing to some node in the linked list.
 """
 
+from typing import Optional
+
 # Definition for a Node.
 class Node:
     def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
@@ -53,16 +55,26 @@ class Node:
 class Solution:
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         prev, curr = Node(-1, head), head
+        # Create a HashMap that maps nodes from 
+        # the old list to nodes in the new list.
         mapping = { prev: Node(-1, head) }
+        # Dummy head for the new list.
         dummy_new_head = mapping[prev]
+
+        # Create nodes for the new list and link 
+        # all the 'next' pointers correctly.
         while curr:
             mapping[curr] = Node(curr.val)
             mapping[prev].next = mapping[curr]
             prev, curr = curr, curr.next
+
+        # Go through the old list again and link 
+        # all the 'random' pointers in the new list correctly.
         curr = head
         while curr:
             if curr.random:
                 mapping[curr].random = mapping[curr.random]
             curr = curr.next
+
         return dummy_new_head.next
 
