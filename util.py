@@ -22,6 +22,25 @@ def initList(lst: List) -> ListNode:
             lNode = lNode.next
         return head
 
+def serializeList(head: ListNode) -> List:
+    lst = []
+    while head:
+        lst, head = lst + [head.val], head.next
+    return "[%s]" % ", ".join(map(str, lst))
+
+def deserializeList(string: str) -> ListNode:
+    try:
+        string = string.strip().replace('null', 'None')
+        if len(string) < 2 or string[0] != '[' or string[-1] != ']':
+            raise Exception("There was a problem parsing the string")
+        lst = list(map(
+            lambda x: int(x) if x != 'None' else None, 
+            [x.strip() for x in string[1 : -1].split(',')]
+        )) if string != '[]' else []
+    except:
+        raise Exception("There was a problem parsing the string")
+    return initList(lst)
+
 def printList(lst: ListNode) -> None:
     while lst != None:
         print(lst.val, end = ' -> ')
@@ -74,13 +93,13 @@ def deserializeTree(string: str) -> TreeNode:
     try:
         string = string.strip().replace('null', 'None')
         if len(string) < 2 or string[0] != '[' or string[-1] != ']':
-            raise Exception("Parsing Error!")
+            raise Exception("There was a problem parsing the string")
         lst = list(map(
             lambda x: int(x) if x != 'None' else None, 
             [x.strip() for x in string[1 : -1].split(',')]
         )) if string != '[]' else []
     except:
-        raise Exception("Parsing Error!")
+        raise Exception("There was a problem parsing the string")
     return initTree(lst)
 
 def levelOrderTraverse(tree: TreeNode) -> List:
