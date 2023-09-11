@@ -45,23 +45,36 @@ from typing import List
 class Solution:
     def combinationSum4(self, nums: List[int], target: int) -> int:
         """ Top-down solution """
+        # # dp[t] <- Number of possible combinations that add up to t
+        # dp = [None] * (target + 1)
+        # # Base case
+        # dp[0] = 1
+
+        # def solve(target):
+        #     if dp[target] is not None:
+        #         return dp[target]
+        #     else:
+        #         count = 0
+        #         for x in nums:
+        #             if x <= target:
+        #                 count += dp[target - x] if dp[target - x] else solve(target - x)
+        #         dp[target] = count
+        #         return count
+
+        # return solve(target)
+
+        """ Bottom-up solution """
         # dp[t] <- Number of possible combinations that add up to t
-        dp = [None] * (target + 1)
+        dp = [0] * (target + 1)
         # Base case
         dp[0] = 1
 
-        def solve(target):
-            if dp[target] is not None:
-                return dp[target]
-            else:
-                count = 0
-                for x in nums:
-                    if x <= target:
-                        count += dp[target - x] if dp[target - x] else solve(target - x)
-                dp[target] = count
-                return count
+        for t in range(1, target + 1):
+            for x in nums:
+                if x <= t:
+                    dp[t] += dp[t - x]
 
-        return solve(target)
+        return dp[target]
 
 # 7
 print(Solution().combinationSum4([1, 2, 3], 4))
