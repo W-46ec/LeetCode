@@ -44,7 +44,7 @@ Explanation: There is no cycle in the linked list.
 import sys
 sys.path += ['.', '../', '../../']
 
-from util import ListNode, initList, printList
+from util import ListNode, deserializeList
 from typing import Optional
 from collections import defaultdict
 
@@ -73,17 +73,15 @@ class Solution:
         # catch the slow pointer at some point.
         # If the fast pointer reaches the tail, then no cycles are detected.
         fast, slow = head, head
-        count = 0
-        while fast:
-            fast = fast.next
-            slow = slow.next if count else slow
-            count = (count + 1) % 2
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
             if fast == slow:
                 return True
         return False
 
 
-head, pos = initList([3, 2, 0, -4]), 1
+head, pos = deserializeList("[3, 2, 0, -4]"), 1
 node, tail = head, head
 for _ in range(pos):
     node = node.next
@@ -94,7 +92,7 @@ if tail and pos >= 0:
 print(Solution().hasCycle(head))    # True
 
 
-head, pos = initList([1, 2]), 0
+head, pos = deserializeList("[1, 2]"), 0
 node, tail = head, head
 for _ in range(pos):
     node = node.next
@@ -105,7 +103,7 @@ if tail and pos >= 0:
 print(Solution().hasCycle(head))    # True
 
 
-head, pos = initList([1]), -1
+head, pos = deserializeList("[1]"), -1
 node, tail = head, head
 for _ in range(pos):
     node = node.next
@@ -116,7 +114,7 @@ if tail and pos >= 0:
 print(Solution().hasCycle(head))    # False
 
 
-head, pos = initList([]), -1
+head, pos = deserializeList("[]"), -1
 node, tail = head, head
 for _ in range(pos):
     node = node.next
