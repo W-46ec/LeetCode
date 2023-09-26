@@ -37,20 +37,20 @@ Output: 1.00000
     - `0 <= query_glass <= query_row < 100` 
 """
 
-
-# Reference: https://leetcode.com/problems/champagne-tower/solution/
-
 class Solution:
     def champagneTower(self, poured: int, query_row: int, query_glass: int) -> float:
-        tower = [[0] * i for i in range(1, query_row + 2)]
-        tower[0][0] = poured
-        for i in range(query_row):
-            for j in range(i + 1):
-                avg_flow = (tower[i][j] - 1) / 2
-                if avg_flow > 0:
-                    tower[i + 1][j] += avg_flow
-                    tower[i + 1][j + 1] += avg_flow
-        return min(1.0, tower[query_row][query_glass])
+        # Top-down solution
+        # Start from the top level. The excess amount will be added to the next level.
+        glasses = [[0] * i for i in range(1, query_row + 3)]
+        glasses[0][0] = poured
+        for i in range(query_row + 1):
+            for j in range(len(glasses[i])):
+                if glasses[i][j] > 1:
+                    excess = glasses[i][j] - 1.0
+                    glasses[i][j] = 1.0
+                    glasses[i + 1][j] += excess / 2
+                    glasses[i + 1][j + 1] += excess / 2
+        return glasses[query_row][query_glass]
 
 # 0
 print(Solution().champagneTower(1, 1, 1))
