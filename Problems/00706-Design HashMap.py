@@ -4,56 +4,52 @@
 
 Design a HashMap without using any built-in hash table libraries.
 
-To be specific, your design should include these functions:
-    - `put(key, value)`: Insert a (key, value) pair into the HashMap. If the value already exists in the HashMap, update the value.
-    - `get(key)`: Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key.
-    - `remove(key)`: Remove the mapping for the value key if this map contains the mapping for the key.
+Implement the `MyHashMap` class:
+    - `MyHashMap()` initializes the object with an empty map.
+    - `void put(int key, int value)` inserts a `(key, value)` pair into the HashMap. If the `key` already exists in the map, update the corresponding `value`.
+    - `int get(int key)` returns the `value` to which the specified `key` is mapped, or `-1` if this map contains no mapping for the `key`.
+    - `void remove(key)` removes the `key` and its corresponding `value` if the map contains the mapping for the `key`.
 
-**Example:** 
+
+**Example 1:** 
 ```
-MyHashMap hashMap = new MyHashMap();
-hashMap.put(1, 1);          
-hashMap.put(2, 2);         
-hashMap.get(1);            // returns 1
-hashMap.get(3);            // returns -1 (not found)
-hashMap.put(2, 1);          // update the existing value
-hashMap.get(2);            // returns 1 
-hashMap.remove(2);          // remove the mapping for 2
-hashMap.get(2);            // returns -1 (not found) 
+Input
+["MyHashMap", "put", "put", "get", "get", "put", "get", "remove", "get"]
+[[], [1, 1], [2, 2], [1], [3], [2, 1], [2], [2], [2]]
+Output
+[null, null, null, 1, -1, null, 1, null, -1]
+
+Explanation
+MyHashMap myHashMap = new MyHashMap();
+myHashMap.put(1, 1); // The map is now [[1,1]]
+myHashMap.put(2, 2); // The map is now [[1,1], [2,2]]
+myHashMap.get(1);    // return 1, The map is now [[1,1], [2,2]]
+myHashMap.get(3);    // return -1 (i.e., not found), The map is now [[1,1], [2,2]]
+myHashMap.put(2, 1); // The map is now [[1,1], [2,1]] (i.e., update the existing value)
+myHashMap.get(2);    // return 1, The map is now [[1,1], [2,1]]
+myHashMap.remove(2); // remove the mapping for 2, The map is now [[1,1]]
+myHashMap.get(2);    // return -1 (i.e., not found), The map is now [[1,1]]
 ```
 
-**Note:** 
-    - All keys and values will be in the range of `[0, 1000000]`.
-    - The number of operations will be in the range of `[1, 10000]`.
-    - Please do not use the built-in HashMap library.
+**Constraints:** 
+    - `0 <= key, value <= 10^6` 
+    - At most `10^4` calls will be made to `put`, `get`, and `remove`.
 """
 
 class MyHashMap:
-
     def __init__(self):
-        """
-        Initialize your data structure here.
-        """
-        self.d = {}
+        self.keys, self.values = [False] * (10 ** 6 + 1), [-1] * (10 ** 6 + 1)
 
     def put(self, key: int, value: int) -> None:
-        """
-        value will always be non-negative.
-        """
-        self.d[key] = value
+        self.keys[key]  = True
+        self.values[key]  = value
 
     def get(self, key: int) -> int:
-        """
-        Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key
-        """
-        return self.d[key] if key in self.d else -1
+        return self.values[key]
 
     def remove(self, key: int) -> None:
-        """
-        Removes the mapping of the specified value key if this map contains a mapping for the key
-        """
-        if key in self.d:
-            self.d.pop(key)
+        self.keys[key] = False
+        self.values[key] = -1
 
 
 # Your MyHashMap object will be instantiated and called as such:
