@@ -38,27 +38,27 @@ from typing import List
 
 class Solution:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
-        # Perform binary-search to find the index of any occurrence of the target.
-        lo, hi = 0, len(nums) - 1
-        while lo <= hi:
-            mid = (lo + hi) // 2
-            if nums[mid] == target:
-                lo = hi = mid
-                break
-            elif nums[mid] > target:
-                hi = mid - 1
-            else:
-                lo = mid + 1
+        # Binary Search
+        # When 'first' is True, return the index of the first occurrence of the target;
+        # When 'first' is False, return the index of the last occurrence of the target;
+        # Return -1 if target is not present in nums.
+        def binarySearch(nums: List[int], target: int, first: int = True) -> int:
+            lo, hi, target_idx = 0, len(nums) - 1, -1
+            while lo <= hi:
+                mid = (lo + hi) // 2
+                if nums[mid] == target:
+                    target_idx = mid
+                    if first:
+                        hi = mid - 1
+                    else:
+                        lo = mid + 1
+                elif nums[mid] > target:
+                    hi = mid - 1
+                else:
+                    lo = mid + 1
+            return target_idx
 
-        # If lo > hi, it means the target was not present in nums; Return [-1, -1].
-        if lo > hi:
-            return [-1, -1]
-        else:
-            while hi + 1 < len(nums) and nums[hi + 1] == target:
-                hi += 1
-            while lo - 1 >= 0 and nums[lo - 1] == target:
-                lo -= 1
-            return [lo, hi]
+        return [binarySearch(nums, target, True), binarySearch(nums, target, False)]
 
 # [3, 4]
 print(Solution().searchRange([5, 7, 7, 8, 8, 10], 8))
