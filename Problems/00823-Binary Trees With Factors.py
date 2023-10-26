@@ -33,12 +33,34 @@ from collections import defaultdict
 
 class Solution:
     def numFactoredBinaryTrees(self, arr: List[int]) -> int:
+        """
+        Dynamic programming approach
+        Let dp[k] be the total number of trees that are rooted at k (i.e., we
+        can form dp[k] different trees with root value equal to k). And k is in arr.
+
+        For any pair of factors (p, q), where p * q is k and p, q are in arr,
+        we can form dp[p] * dp[q] trees with root value equal to k.
+        Therefore, we have the following equation:
+
+        dp[k] = sum(dp[p] * dp[q] for all p, q in arr such that p * q == k)
+
+        Eventually, sum up the value of dp[k] for all k in arr will give us the answer.
+        """
+
+        # Sort the integers so that we can start with the smallest numbers first
         arr = sorted(arr)
+        # Initialization -- each integer can form one tree by itself
         dp = defaultdict(int, { x: 1 for x in arr })
-        for i in range(1, len(arr)):
+
+        # Build the solution bottom-up
+        for i in range(len(arr)):
+            # Check through arr[ : i] to find all factors of arr[i]
             for j in range(i):
-                x, y, z = arr[i], arr[j], arr[i] // arr[j]
-                dp[x] += dp[y] * dp[z] if x == y * z else 0
+                # If arr[j] divides arr[i], add the number of trees that form arr[j] times
+                # the number of trees that form arr[arr[i] // arr[j]] to dp[arr[i]].
+                q = arr[i] // arr[j]
+                dp[arr[i]] += dp[q] * dp[arr[j]] if q * arr[j] == arr[i] else 0
+
         return sum(dp.values()) % (10 ** 9 + 7)
 
 # 3
