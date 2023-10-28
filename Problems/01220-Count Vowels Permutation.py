@@ -55,18 +55,24 @@ class Solution:
 
         Therefore, we can build the solution bottom-up and return the sum of the number of
         strings of length n that end with 'a', 'e', 'i', 'o', and 'u' respectively.
-        """
 
-        dp = { c: [1] + [0] * (n - 1) for c in "aeiou" }
+        Optimization:
+        Note that at any iteration i, we only need the results from the previous iteration (i.e., i - 1).
+        Therefore, we don't need an array of size O(5 * n). Instead we ony need O(5) space to store
+        the results from each iteration.
+        """
+        dp = { c: 1 for c in "aeiou" }
 
         for i in range(n - 1):
-            dp['a'][i + 1] += dp['e'][i] + dp['i'][i] + dp['u'][i]
-            dp['e'][i + 1] += dp['a'][i] + dp['i'][i]
-            dp['i'][i + 1] += dp['e'][i] + dp['o'][i]
-            dp['o'][i + 1] += dp['i'][i]
-            dp['u'][i + 1] += dp['i'][i] + dp['o'][i]
+            dp['a'], dp['e'], dp['i'], dp['o'], dp['u'] = \
+                dp['e'] + dp['i'] + dp['u'], \
+                dp['a'] + dp['i'], \
+                dp['e'] + dp['o'], \
+                dp['i'], \
+                dp['i'] + dp['o']
 
-        return sum([dp[c][-1] for c in "aeiou"]) % (10 ** 9 + 7)
+        return sum(dp.values()) % (10 ** 9 + 7)
+
 
 if __name__ == '__main__':
     # 5
@@ -83,3 +89,12 @@ if __name__ == '__main__':
 
     # 68
     print(Solution().countVowelPermutation(5))
+
+    # 129
+    print(Solution().countVowelPermutation(6))
+
+    # 249
+    print(Solution().countVowelPermutation(7))
+
+    # 474
+    print(Solution().countVowelPermutation(8))
