@@ -37,6 +37,8 @@ Output: 68
     - `1 <= n <= 2 * 10^4` 
 """
 
+import unittest
+
 class Solution:
     def countVowelPermutation(self, n: int) -> int:
         """
@@ -74,27 +76,34 @@ class Solution:
         return sum(dp.values()) % (10 ** 9 + 7)
 
 
+class Test(unittest.TestCase):
+    def setUp(self):
+        self.soln_obj = Solution()
+
+    def testcase1(self):
+        self.assertEqual(self.soln_obj.countVowelPermutation(1), 5)
+
+    def testcase2(self):
+        self.assertEqual(self.soln_obj.countVowelPermutation(2), 10)
+
+    def testcase3(self):
+        self.assertEqual(self.soln_obj.countVowelPermutation(3), 19)
+
+    def testcase4(self):
+        self.assertEqual(self.soln_obj.countVowelPermutation(4), 35)
+
+    def testcase5(self):
+        self.assertEqual(self.soln_obj.countVowelPermutation(5), 68)
+
+    def testcase6(self):
+        self.assertEqual(self.soln_obj.countVowelPermutation(6), 129)
+
+    def testcase7(self):
+        self.assertEqual(self.soln_obj.countVowelPermutation(7), 249)
+
+    def testcase8(self):
+        self.assertEqual(self.soln_obj.countVowelPermutation(8), 474)
+
+
 if __name__ == '__main__':
-    # 5
-    print(Solution().countVowelPermutation(1))
-
-    # 10
-    print(Solution().countVowelPermutation(2))
-
-    # 19
-    print(Solution().countVowelPermutation(3))
-
-    # 35
-    print(Solution().countVowelPermutation(4))
-
-    # 68
-    print(Solution().countVowelPermutation(5))
-
-    # 129
-    print(Solution().countVowelPermutation(6))
-
-    # 249
-    print(Solution().countVowelPermutation(7))
-
-    # 474
-    print(Solution().countVowelPermutation(8))
+    unittest.main()
