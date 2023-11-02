@@ -38,6 +38,7 @@ sys.path += ['.', '../', '../../']
 
 import unittest
 from random import randint
+from collections import Counter
 from typing import List, Optional
 from util import TreeNode, deserializeTree
 from collections import defaultdict
@@ -51,17 +52,42 @@ from collections import defaultdict
 
 class Solution:
     def findMode(self, root: Optional[TreeNode]) -> List[int]:
-        freq = defaultdict(int)
+        # # O(n) extra space
+        # freq = defaultdict(int)
+        # def inorder(tree: Optional[TreeNode]) -> None:
+        #     if tree:
+        #         inorder(tree.left)
+        #         freq[tree.val] += 1
+        #         inorder(tree.right)
+        # inorder(root)
+        # max_freq = max(freq.values())
+        # return [k for k in freq if freq[k] == max_freq]
+
+
+        # Constant extra space
+        modes, curr_val, curr_freq, max_freq = [], None, 0, 1
 
         def inorder(tree: Optional[TreeNode]) -> None:
+            nonlocal modes, curr_val, curr_freq, max_freq
             if tree:
                 inorder(tree.left)
-                freq[tree.val] += 1
+                if tree.val == curr_val:
+                    curr_freq += 1
+                else:
+                    if curr_freq > max_freq:
+                        modes = [curr_val]
+                        max_freq = max(max_freq, curr_freq)
+                    elif curr_freq == max_freq:
+                        modes += [curr_val]
+                    curr_val, curr_freq = tree.val, 1
                 inorder(tree.right)
 
         inorder(root)
-        max_freq = max(freq.values())
-        return [k for k in freq if freq[k] == max_freq]
+        if curr_freq > max_freq:
+            modes = [curr_val]
+        elif curr_freq == max_freq:
+            modes += [curr_val]
+        return modes
 
 
 class Test(unittest.TestCase):
@@ -69,13 +95,29 @@ class Test(unittest.TestCase):
         self.soln_obj = Solution()
 
     def testcase1(self):
-        self.assertEqual(self.soln_obj.findMode(deserializeTree("[1, null, 2, 2]")), [2])
+        self.assertEqual(sorted(self.soln_obj.findMode(deserializeTree("[1, null, 2, 2]"))), [2])
 
     def testcase2(self):
-        self.assertEqual(self.soln_obj.findMode(deserializeTree("[0]")), [0])
+        self.assertEqual(sorted(self.soln_obj.findMode(deserializeTree("[0]"))), [0])
 
     def testcase3(self):
-        self.assertEqual(self.soln_obj.findMode(deserializeTree("[1, 1, 2, null, null, 2]")), [1, 2])
+        self.assertEqual(sorted(self.soln_obj.findMode(deserializeTree("[1, 1, 2, null, null, 2]"))), [1, 2])
+
+    def test_random(self):
+        def _buildTree(lst: List[int], lo: int, hi: int) -> TreeNode:
+            if lo <= hi:
+                mid = (lo + hi) // 2;
+                return TreeNode(lst[mid], _buildTree(lst, lo, mid - 1), _buildTree(lst, mid + 1, hi))
+            return None
+
+        num_tests = 20
+        for _ in range(num_tests):
+            lst_len = randint(1, 10 ** 4)
+            lst = sorted([randint(-100, 100) for _ in range(lst_len)])
+            root = _buildTree(lst, 0, len(lst) - 1)
+            modes = self.soln_obj.findMode(root)
+            self.assertEqual(sorted(modes), sorted(filter(lambda x: lst.count(x) == max(Counter(lst).values()), set(lst))))
+
 
 
 if __name__ == '__main__':
