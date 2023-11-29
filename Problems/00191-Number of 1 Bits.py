@@ -36,6 +36,8 @@ Explanation: The input binary string 11111111111111111111111111111101 has a tota
 **Follow up**: If this function is called many times, how would you optimize it?
 """
 
+import unittest
+
 class Solution:
     def hammingWeight(self, n: int) -> int:
         ans = 0
@@ -45,12 +47,19 @@ class Solution:
         return ans
 
 
-# 3
-print(Solution().hammingWeight(int('00000000000000000000000000001011', base = 2)))
+class Test(unittest.TestCase):
+    def setUp(self):
+        self.soln_obj = Solution()
 
-# 1
-print(Solution().hammingWeight(int('00000000000000000000000010000000', base = 2)))
+    def testcase1(self):
+        self.assertEqual(self.soln_obj.hammingWeight(int('00000000000000000000000000001011', base = 2)), 3)
 
-# 31
-print(Solution().hammingWeight(int('11111111111111111111111111111101', base = 2)))
+    def testcase2(self):
+        self.assertEqual(self.soln_obj.hammingWeight(int('00000000000000000000000010000000', base = 2)), 1)
 
+    def testcase3(self):
+        self.assertEqual(self.soln_obj.hammingWeight(int('11111111111111111111111111111101', base = 2)), 31)
+
+
+if __name__ == '__main__':
+    unittest.main()
