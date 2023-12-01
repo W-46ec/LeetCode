@@ -42,19 +42,29 @@ Concatenate all strings in the first array into a single string in the given ord
 Both arrays represent the same string if and only if the generated strings are the same.
 """
 
+import unittest
 from typing import List
-from functools import reduce
 
 class Solution:
     def arrayStringsAreEqual(self, word1: List[str], word2: List[str]) -> bool:
-        return reduce(lambda x, y: x + y, word1) == reduce(lambda x, y: x + y, word2)
+        return "".join(word1) == "".join(word2)
 
-# True
-print(Solution().arrayStringsAreEqual(["ab", "c"], ["a", "bc"]))
 
-# False
-print(Solution().arrayStringsAreEqual(["a", "cb"], ["ab", "c"]))
+class Test(unittest.TestCase):
+    def setUp(self):
+        self.soln_obj = Solution()
 
-# True
-print(Solution().arrayStringsAreEqual(["abc", "d", "defg"], ["abcddefg"]))
+    def testcase1(self):
+        self.assertEqual(self.soln_obj.arrayStringsAreEqual(["ab", "c"], ["a", "bc"]), True)
+
+    def testcase2(self):
+        self.assertEqual(self.soln_obj.arrayStringsAreEqual(["a", "cb"], ["ab", "c"]), False)
+
+    def testcase3(self):
+        self.assertEqual(self.soln_obj.arrayStringsAreEqual(["abc", "d", "defg"], ["abcddefg"]), True)
+
+
+if __name__ == '__main__':
+    unittest.main()
+
 
