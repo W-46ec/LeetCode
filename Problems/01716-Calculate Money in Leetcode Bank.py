@@ -38,10 +38,36 @@ import unittest
 
 class Solution:
     def totalMoney(self, n: int) -> int:
-        bank = 0
-        for d in range(n):
-            bank += (d % 7) + 1 + (d // 7)
-        return bank
+        # # Loop approach
+        # bank = 0
+        # for d in range(n):
+        #     bank += (d % 7) + 1 + (d // 7)
+        # return bank
+
+
+        # Math approach
+        """
+        Let q be the number of weeks, and r be the number days in the last week.
+        By definition, we have the following:
+
+        - Week 1: 1 + 2 + ... + 7 = 28 + 0 * 7
+        - Week 2: 2 + 3 + ... + 8 = 28 + 1 * 7
+        - Week 3: 3 + 4 + ... + 9 = 28 + 2 * 7
+        - ...
+        - Week q:                   28 + (q - 1) * 7, where q is (n // 7)
+
+        For the remaining days in the final week (i.e., r = n % 7), 
+        the amount of money he will put is given by: (1 + 2 + ... + r) + q * r
+
+        Therefore the total amount of money saved is given by the following:
+
+          [(28 * q) + (0 * 7 + 1 * 7 + 2 * 7 + ... + (q - 1) * 7)] + [(1 + 2 + ... + r) + q * r]
+        = [28 * q + 7 * (q - 1) * q // 2] + [(1 + r) * r // 2 + q * r]
+        = 28 * q + (7 * q ** 2 - 7 * q) // 2 + (r ** 2 + r) // 2 + q * r
+        = (7 * q ** 2 + 49 * q + r ** 2 + r + 2 * r * q) // 2
+        """
+        q, r = n // 7, n % 7
+        return (7 * q ** 2 + 49 * q + r ** 2 + r + 2 * r * q) // 2
 
 
 class Test(unittest.TestCase):
