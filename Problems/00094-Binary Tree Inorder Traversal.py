@@ -40,10 +40,21 @@ from typing import Optional, List
 
 class Solution:
     def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
-        # Recursive solution
-        if root:
-            return self.inorderTraversal(root.left) + [root.val] + self.inorderTraversal(root.right)
-        return []
+        # # Recursive solution
+        # if root:
+        #     return self.inorderTraversal(root.left) + [root.val] + self.inorderTraversal(root.right)
+        # return []
+
+        # Iterative solution
+        stack, curr_node, arr = [], root, []
+        while curr_node or stack:
+            while curr_node:
+                stack += [curr_node]
+                curr_node = curr_node.left
+            node = stack.pop()
+            arr += [node.val]
+            curr_node = node.right
+        return arr
 
 
 class Test(unittest.TestCase):
