@@ -15,7 +15,7 @@ Return *the difference matrix `diff`*.
 
 
 **Example 1:** 
-
+![2482_image-20221106171729-5](./img/2482_image-20221106171729-5.png)
 ```
 Input: grid = [[0,1,1],[1,0,1],[0,0,1]]
 Output: [[0,0,4],[0,0,4],[-2,-2,2]]
@@ -32,7 +32,7 @@ Explanation:
 ```
 
 **Example 2:** 
-
+![2482_image-20221106171747-6](./img/2482_image-20221106171747-6.png)
 ```
 Input: grid = [[1,1,1],[1,1,1]]
 Output: [[5,5,5],[5,5,5]]
