@@ -23,13 +23,24 @@ You may assume the string contains only lowercase alphabets.
 What if the inputs contain unicode characters? How would you adapt your solution to such case?
 """
 
+import unittest
+
 class Solution:
     def isAnagram(self, s: str, t: str) -> bool:
         return sorted(s) == sorted(t)
 
-# True
-print(Solution().isAnagram("anagram", "nagaram"))
 
-# False
-print(Solution().isAnagram("rat", "car"))
+class Test(unittest.TestCase):
+    def setUp(self):
+        self.soln_obj = Solution()
+
+    def testcase1(self):
+        self.assertEqual(self.soln_obj.isAnagram("anagram", "nagaram"), True)
+
+    def testcase2(self):
+        self.assertEqual(self.soln_obj.isAnagram("rat", "car"), False)
+
+
+if __name__ == '__main__':
+    unittest.main()
 
