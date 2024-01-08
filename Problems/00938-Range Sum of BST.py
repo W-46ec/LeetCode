@@ -34,8 +34,9 @@ Output: 23
 #         self.right = right
 
 import sys
-sys.path  = sys.path = ['.', '../', '../../'] + sys.path
+sys.path += ['.', '../', '../../']
 
+import unittest
 from util import TreeNode, deserializeTree
 
 class Solution:
@@ -49,9 +50,17 @@ class Solution:
         else:
             return self.rangeSumBST(root.left, low, high)
 
-# 32
-print(Solution().rangeSumBST(deserializeTree("[10, 5, 15, 3, 7, null, 18]"), 7, 15))
 
-# 23
-print(Solution().rangeSumBST(deserializeTree("[10, 5, 15, 3, 7, 13, 18, 1, null, 6]"), 6, 10))
+class Test(unittest.TestCase):
+    def setUp(self):
+        self.soln_obj = Solution()
 
+    def testcase1(self):
+        self.assertEqual(self.soln_obj.rangeSumBST(deserializeTree("[10, 5, 15, 3, 7, null, 18]"), 7, 15), 32)
+
+    def testcase2(self):
+        self.assertEqual(self.soln_obj.rangeSumBST(deserializeTree("[10, 5, 15, 3, 7, 13, 18, 1, null, 6]"), 6, 10), 23)
+
+
+if __name__ == '__main__':
+    unittest.main()
