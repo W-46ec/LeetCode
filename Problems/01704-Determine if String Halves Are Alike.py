@@ -6,7 +6,7 @@ You are given a string `s` of even length. Split this string into two halves of 
 
 Two strings are **alike** if they have the same number of vowels (`'a'`, `'e'`, `'i'`, `'o'`, `'u'`, `'A'`, `'E'`, `'I'`, `'O'`, `'U'`). Notice that `s` contains uppercase and lowercase letters.
 
-Return `true` *if `a` and `b` are **alike***. Otherwise, return `false`.
+Return *`true` if `a` and `b` are **alike***. Otherwise, return `false`.
 
 
 **Example 1:** 
@@ -45,20 +45,30 @@ Output: true
 Create a function that checks if a character is a vowel, either uppercase or lowercase.
 """
 
+import unittest
+
 class Solution:
     def halvesAreAlike(self, s: str) -> bool:
-        vowels = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']
-        return sum(map(lambda x: x in vowels, s[ : len(s) // 2])) \
-            == sum(map(lambda x: x in vowels, s[len(s) // 2 : ]))
+        vowels = set("aeiouAEIOU")
+        return sum(map(lambda c: c in vowels, s[ : len(s) // 2])) == sum(map(lambda c: c in vowels, s[len(s) // 2 : ]))
 
-# True
-print(Solution().halvesAreAlike("book"))
 
-# False
-print(Solution().halvesAreAlike("textbook"))
+class Test(unittest.TestCase):
+    def setUp(self):
+        self.soln_obj = Solution()
 
-# False
-print(Solution().halvesAreAlike("MerryChristmas"))
+    def testcase1(self):
+        self.assertEqual(self.soln_obj.halvesAreAlike("book"), True)
 
-# True
-print(Solution().halvesAreAlike("AbCdEfGh"))
+    def testcase2(self):
+        self.assertEqual(self.soln_obj.halvesAreAlike("textbook"), False)
+
+    def testcase3(self):
+        self.assertEqual(self.soln_obj.halvesAreAlike("MerryChristmas"), False)
+
+    def testcase4(self):
+        self.assertEqual(self.soln_obj.halvesAreAlike("AbCdEfGh"), True)
+
+
+if __name__ == '__main__':
+    unittest.main()
