@@ -28,6 +28,7 @@ Explanation: Rob house 1 (money = 2), rob house 3 (money = 9) and rob house 5 (m
     - `0 <= nums[i] <= 400` 
 """
 
+import unittest
 from typing import List
 
 class Solution:
@@ -39,6 +40,17 @@ class Solution:
             dp[i] = max(dp[i - 2] + nums[i - 2], dp[i - 1])
         return dp[-1]
 
-print(Solution().rob([1, 2, 3, 1]))     # 4
-print(Solution().rob([2, 7, 9, 3, 1]))  # 12
 
+class Test(unittest.TestCase):
+    def setUp(self):
+        self.soln_obj = Solution()
+
+    def testcase1(self):
+        self.assertEqual(self.soln_obj.rob([1, 2, 3, 1]), 4)
+
+    def testcase2(self):
+        self.assertEqual(self.soln_obj.rob([2, 7, 9, 3, 1]), 12)
+
+
+if __name__ == '__main__':
+    unittest.main()
