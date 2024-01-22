@@ -26,22 +26,34 @@ Output: [1,2]
     - `1 <= nums[i] <= 10^4` 
 """
 
+import unittest
 from typing import List
 
 class Solution:
     def findErrorNums(self, nums: List[int]) -> List[int]:
-        s = set(nums)
-        return [sum(nums) - sum(s), list(set(range(1, len(nums) + 1)) - s)[0]]
+        nums_sum, n = sum(nums), len(nums)
+        repeated = nums_sum - sum(set(nums))
+        missing = (1 + n) * n // 2 - nums_sum + repeated
+        return [repeated, missing]
 
-# [2, 3]
-print(Solution().findErrorNums([1, 2, 2, 4]))
 
-# [1, 2]
-print(Solution().findErrorNums([1, 1]))
+class Test(unittest.TestCase):
+    def setUp(self):
+        self.soln_obj = Solution()
 
-# [2, 1]
-print(Solution().findErrorNums([2, 2]))
+    def testcase1(self):
+        self.assertEqual(self.soln_obj.findErrorNums([1, 2, 2, 4]), [2, 3])
 
-# [3, 1]
-print(Solution().findErrorNums([3, 2, 3, 4, 6, 5]))
+    def testcase2(self):
+        self.assertEqual(self.soln_obj.findErrorNums([1, 1]), [1, 2])
+
+    def testcase3(self):
+        self.assertEqual(self.soln_obj.findErrorNums([2, 2]), [2, 1])
+
+    def testcase4(self):
+        self.assertEqual(self.soln_obj.findErrorNums([3, 2, 3, 4, 6, 5]), [3, 1])
+
+
+if __name__ == '__main__':
+    unittest.main()
 
