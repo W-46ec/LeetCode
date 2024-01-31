@@ -2,14 +2,18 @@
 """
 # Evaluate Reverse Polish Notation
 
-Evaluate the value of an arithmetic expression in [Reverse Polish Notation](http://en.wikipedia.org/wiki/Reverse_Polish_notation).
+You are given an array of strings `tokens` that represents an arithmetic expression in a [Reverse Polish Notation](http://en.wikipedia.org/wiki/Reverse_Polish_notation).
 
-Valid operators are `+`, `-`, `*`, and `/`. Each operand may be an integer or another expression.
+Evaluate the expression. Return *an integer that represents the value of the expression*.
 
-**Note** that division between two integers should truncate toward zero.
-
-It is guaranteed that the given RPN expression is always valid. That means the expression would always evaluate to a result, and there will not be any division by zero operation.
-
+**Note** that:
+    - The valid operators are `'+'`, `'-'`, `'*'`, and `'/'`.
+    - Each operand may be an integer or another expression.
+    - The division between two integers always **truncates toward zero**.
+    - There will not be any division by zero.
+    - The input represents a valid arithmetic expression in a reverse polish notation.
+    - The answer and all the intermediate calculations can be represented in a **32-bit** integer.
+ 
 
 **Example 1:** 
 ```
@@ -43,6 +47,7 @@ Explanation: ((10 * (6 / ((9 + 3) * -11))) + 17) + 5
     - `tokens[i]` is either an operator: `"+"`, `"-"`, `"*"`, or `"/"`, or an integer in the range `[-200, 200]`.
 """
 
+import unittest
 from typing import List
 
 class Solution:
@@ -63,11 +68,24 @@ class Solution:
                 stack[len(stack) : ] = [int(t)]
         return stack[0]
 
-# 9
-print(Solution().evalRPN(['2', '1', '+', '3', '*']))
 
-# 6
-print(Solution().evalRPN(['4', '13', '5', '/', '+']))
+class Test(unittest.TestCase):
+    def setUp(self):
+        self.soln_obj = Solution()
 
-# 22
-print(Solution().evalRPN(['10', '6', '9', '3', '+', '-11', '*', '/', '*', '17', '+', '5', '+']))
+    def testcase1(self):
+        self.assertEqual(self.soln_obj.evalRPN(["2", "1", "+", "3", "*"]), 9)
+
+    def testcase2(self):
+        self.assertEqual(self.soln_obj.evalRPN(["4", "13", "5", "/", "+"]), 6)
+
+    def testcase3(self):
+        self.assertEqual(self.soln_obj.evalRPN(["10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"]), 22)
+
+    def testcase4(self):
+        self.assertEqual(self.soln_obj.evalRPN(["3", "-4", "+"]), -1)
+
+
+if __name__ == '__main__':
+    unittest.main()
+
