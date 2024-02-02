@@ -23,33 +23,37 @@ Output: [1234,2345,3456,4567,5678,6789,12345]
     - `10 <= low <= high <= 10^9` 
 """
 
+import unittest
 from typing import List
-from math import ceil, log10
-from functools import reduce
 
 class Solution:
     def sequentialDigits(self, low: int, high: int) -> List[int]:
-        # The the number of digits of the lower and upper bound
-        lo, hi = ceil(log10(low)), ceil(log10(high))
+        nums = []
+        # Start digit is ranged from 1 to 9 (inclusive)
+        for start_digit in range(1, 10):
+            curr_num = 0
+            # End digit is ranged from start_digit to 9 (inclusive)
+            for end_digit in range(start_digit, 10):
+                curr_num = curr_num * 10 + end_digit
+                # Add the number to nums if it is in range [low, high]
+                if low <= curr_num <= high:
+                    nums += [curr_num]
+                elif high < curr_num:
+                    break
+        return sorted(nums)
 
-        # Results
-        res = []
-        
-        # The range of possible length (digit) of the numbers in the results
-        for digit_count in range(lo, hi + 1):
-            # The range of the first digit
-            for first_digit in range(1, 11 - digit_count):
-                seq_digit = reduce(
-                    lambda x, y: x * 10 + y, 
-                    range(first_digit, first_digit + digit_count)
-                )
-                res += [seq_digit] if low <= seq_digit <= high else []
 
-        return res
+class Test(unittest.TestCase):
+    def setUp(self):
+        self.soln_obj = Solution()
 
-# [123, 234]
-print(Solution().sequentialDigits(100, 300))
+    def testcase1(self):
+        self.assertEqual(self.soln_obj.sequentialDigits(100, 300), [123, 234])
 
-# [1234, 2345, 3456, 4567, 5678, 6789, 12345]
-print(Solution().sequentialDigits(1000, 13000))
+    def testcase2(self):
+        self.assertEqual(self.soln_obj.sequentialDigits(1000, 13000), [1234, 2345, 3456, 4567, 5678, 6789, 12345])
+
+
+if __name__ == '__main__':
+    unittest.main()
 
