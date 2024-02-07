@@ -36,19 +36,61 @@ Note that 'A' and 'a' are treated as two different characters.
     - `s` consists of uppercase and lowercase English letters and digits.
 """
 
+import unittest
 from collections import Counter
 
 class Solution:
     def frequencySort(self, s: str) -> str:
         freq = Counter(s)
-        keys = sorted(freq, key = lambda x: freq[x], reverse = True)
+        keys = sorted(freq.keys(), key = lambda x: freq[x], reverse = True)
         return "".join([c * freq[c] for c in keys])
 
-# "eetr"
-print(Solution().frequencySort("tree"))
 
-# "cccaaa"
-print(Solution().frequencySort("cccaaa"))
+class Test(unittest.TestCase):
+    def setUp(self):
+        self.soln_obj = Solution()
 
-# "bbAa"
-print(Solution().frequencySort("Aabb"))
+    def testcase1(self):
+        res = self.soln_obj.frequencySort("tree")
+        ans = "eert"
+        freq_res = Counter(res)
+        occurances = [freq_res[k] for k in res]
+        self.assertEqual(len(res), len(ans))
+        self.assertEqual(sorted(res), sorted(ans))
+        for i in range(len(occurances) - 1):
+            self.assertGreaterEqual(occurances[i], occurances[i + 1])
+
+    def testcase2(self):
+        res = self.soln_obj.frequencySort("cccaaa")
+        ans = "aaaccc"
+        freq_res = Counter(res)
+        occurances = [freq_res[k] for k in res]
+        self.assertEqual(len(res), len(ans))
+        self.assertEqual(sorted(res), sorted(ans))
+        for i in range(len(occurances) - 1):
+            self.assertGreaterEqual(occurances[i], occurances[i + 1])
+
+    def testcase3(self):
+        res = self.soln_obj.frequencySort("Aabb")
+        ans = "bbAa"
+        freq_res = Counter(res)
+        occurances = [freq_res[k] for k in res]
+        self.assertEqual(len(res), len(ans))
+        self.assertEqual(sorted(res), sorted(ans))
+        for i in range(len(occurances) - 1):
+            self.assertGreaterEqual(occurances[i], occurances[i + 1])
+
+    def testcase4(self):
+        res = self.soln_obj.frequencySort("loveleetcode")
+        ans = "eeeeoollvtdc"
+        freq_res = Counter(res)
+        occurances = [freq_res[k] for k in res]
+        self.assertEqual(len(res), len(ans))
+        self.assertEqual(sorted(res), sorted(ans))
+        for i in range(len(occurances) - 1):
+            self.assertGreaterEqual(occurances[i], occurances[i + 1])
+
+
+if __name__ == '__main__':
+    unittest.main()
+
