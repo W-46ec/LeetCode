@@ -41,40 +41,41 @@ Output: -1
     - `1 <= a_i, b_i <= n` 
 """
 
+import unittest
 from typing import List
-from collections import defaultdict
 
 class Solution:
-    def findJudge(self, N: int, trust: List[List[int]]) -> int:
-        # Special case: There's only one person -- the judge
-        if N == 1:
-            return 1
-        
-        # inbound_deg[k] -- The number of nodes that are pointing to k
-        # outbound_deg[k] -- The number of nodes that k is pointing to
-        inbound_deg = defaultdict(int)
-        outbound_deg = defaultdict(int)
-        
-        # Find the in/outbound degree for each node
+    def findJudge(self, n: int, trust: List[List[int]]) -> int:
+        # in_degree[i] -- The number of nodes that are pointing to node i
+        # out_degree[i] -- The number of nodes that node i is pointing to
+        in_degree, out_degree = [0] * n, [0] * n
         for a, b in trust:
-            inbound_deg[b] += 1
-            outbound_deg[a] += 1
-        
-        # Find the node with inbound degree equal to N - 1
-        # and outbound degree equal to 0
-        for k in inbound_deg:
-            if inbound_deg[k] == N - 1 and outbound_deg[k] == 0:
-                return k
+            in_degree[b - 1] += 1
+            out_degree[a - 1] += 1
+        for i, x in enumerate(in_degree):
+            # By definition, the town judge should have in-degree
+            # equal (n - 1) and out-degree equal to 0.
+            if x == n - 1 and out_degree[i] == 0:
+                return i + 1
         return -1
 
-# 2
-print(Solution().findJudge(2, [[1, 2]]))
+class Test(unittest.TestCase):
+    def setUp(self):
+        self.soln_obj = Solution()
 
-# 3
-print(Solution().findJudge(3, [[1, 3], [2, 3]]))
+    def testcase1(self):
+        self.assertEqual(self.soln_obj.findJudge(2, [[1, 2]]), 2)
 
-# -1
-print(Solution().findJudge(3, [[1, 3], [2, 3], [3, 1]]))
+    def testcase2(self):
+        self.assertEqual(self.soln_obj.findJudge(3, [[1, 3], [2, 3]]), 3)
 
-# 1
-print(Solution().findJudge(1, []))
+    def testcase3(self):
+        self.assertEqual(self.soln_obj.findJudge(3, [[1, 3], [2, 3], [3, 1]]), -1)
+
+    def testcase4(self):
+        self.assertEqual(self.soln_obj.findJudge(1, []), 1)
+
+
+if __name__ == '__main__':
+    unittest.main()
+
