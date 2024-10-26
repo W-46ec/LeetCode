@@ -9,7 +9,7 @@ If a `folder[i]` is located within another `folder[j]`, it is called a **sub-fol
 The format of a path is one or more concatenated strings of the form: `'/'` followed by one or more lowercase English letters.
 
 - For example, `"/leetcode"` and `"/leetcode/problems"` are valid paths while an empty string and `"/"` are not.
- 
+
 
 **Example 1:** 
 ```
@@ -68,25 +68,25 @@ class Test(unittest.TestCase):
 
     def testcase1(self):
         self.assertEqual(
-            sorted(self.soln_obj.removeSubfolders(["/a","/a/b","/c/d","/c/d/e","/c/f"])), 
-            sorted(["/a","/c/d","/c/f"])
+            sorted(self.soln_obj.removeSubfolders(["/a", "/a/b", "/c/d", "/c/d/e", "/c/f"])), 
+            sorted(["/a", "/c/d", "/c/f"])
         )
 
     def testcase2(self):
         self.assertEqual(
-            sorted(self.soln_obj.removeSubfolders(["/a","/a/b/c","/a/b/d"])), 
+            sorted(self.soln_obj.removeSubfolders(["/a", "/a/b/c", "/a/b/d"])), 
             sorted(["/a"])
         )
 
     def testcase3(self):
         self.assertEqual(
-            sorted(self.soln_obj.removeSubfolders(["/a/b/c","/a/b/ca","/a/b/d"])), 
-            sorted(["/a/b/c","/a/b/ca","/a/b/d"])
+            sorted(self.soln_obj.removeSubfolders(["/a/b/c", "/a/b/ca", "/a/b/d"])), 
+            sorted(["/a/b/c", "/a/b/ca", "/a/b/d"])
         )
 
     def testcase4(self):
         self.assertEqual(
-            sorted(self.soln_obj.removeSubfolders(["/a","/a/b", "/a/b/c/d"])), 
+            sorted(self.soln_obj.removeSubfolders(["/a", "/a/b", "/a/b/c/d"])), 
             sorted(["/a"])
         )
 
