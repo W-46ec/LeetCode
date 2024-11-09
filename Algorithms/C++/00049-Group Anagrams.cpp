@@ -63,15 +63,15 @@ int main(int argc, char *argv[]) {
 
     vector<string> strs = {"eat", "tea", "tan", "ate", "nat", "bat"};
     // {{"bat"}, {"tan", "nat"}, {"eat", "tea", "ate"}}
-    print<string>(obj.groupAnagrams(strs), "\n", true);
+    print<string>(obj.groupAnagrams(strs), "\n", '"');
 
     strs = vector<string>{""};
     // {{""}}
-    print<string>(obj.groupAnagrams(strs), "\n", true);
+    print<string>(obj.groupAnagrams(strs), "\n", '"');
 
     strs = vector<string>{"a"};
     // {{"a"}}
-    print<string>(obj.groupAnagrams(strs), "\n", true);
+    print<string>(obj.groupAnagrams(strs), "\n", '"');
 
     return 0;
 }
