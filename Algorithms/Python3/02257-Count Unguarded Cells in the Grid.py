@@ -43,32 +43,28 @@ from typing import List
 
 class Solution:
     def countUnguarded(self, m: int, n: int, guards: List[List[int]], walls: List[List[int]]) -> int:
-        grid = [[''] * n for _ in range(m)]
+        grid = [[0] * n for _ in range(m)]
+        # Fill in the guards and walls in the grid
+        # - 1 for guard
+        # - 2 for wall
         for x, y in guards:
-            grid[x][y] = 'G'
+            grid[x][y] = 1
         for x, y in walls:
-            grid[x][y] = 'W'
+            grid[x][y] = 2
 
-        queue = []
-        for x, y in guards:
+        # Fill in the cells that are guarded
+        # - 3 represents a guarded cell
+        for i, j in guards:
             for dx, dy in [[-1, 0], [1, 0], [0, 1], [0, -1]]:
-                if 0 <= x + dx < m \
+                x, y = i, j
+                while 0 <= x + dx < m \
                         and 0 <= y + dy < n \
-                        and grid[x + dx][y + dy] != 'W' \
-                        and grid[x + dx][y + dy] != 'G':
-                    queue += [(x + dx, y + dy, dx, dy)]
+                        and grid[x + dx][y + dy] != 1 \
+                        and grid[x + dx][y + dy] != 2:
+                    grid[x + dx][y + dy] = 3
+                    x, y = x + dx, y + dy
 
-        while queue:
-            x, y, dx, dy = queue.pop(0)
-            grid[x][y] = '1'
-            if 0 <= x + dx < m \
-                    and 0 <= y + dy < n \
-                    and grid[x + dx][y + dy] != 'W' \
-                    and grid[x + dx][y + dy] != 'G':
-                grid[x + dx][y + dy] = '1'
-                queue += [(x + dx, y + dy, dx, dy)]
-
-        return sum([row.count('') for row in grid])
+        return sum([row.count(0) for row in grid])
 
 
 class Test(unittest.TestCase):
