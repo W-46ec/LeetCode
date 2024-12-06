@@ -15,7 +15,7 @@ Return *an `n x m` matrix representing the box after the rotation described abov
 
 
 **Example 1:** 
-
+![1861_rotatingtheboxleetcodewithstones](./img/1861_rotatingtheboxleetcodewithstones.png)
 ```
 Input: box = [["#",".","#"]]
 Output: [["."],
@@ -24,7 +24,7 @@ Output: [["."],
 ```
 
 **Example 2:** 
-
+![1861_rotatingtheboxleetcode2withstones](./img/1861_rotatingtheboxleetcode2withstones.png)
 ```
 Input: box = [["#",".","*","."],
               ["#","#","*","."]]
@@ -35,7 +35,7 @@ Output: [["#","."],
 ```
 
 **Example 3:** 
-
+![1861_rotatingtheboxleetcode3withstone](./img/1861_rotatingtheboxleetcode3withstone.png)
 ```
 Input: box = [["#","#","*",".","*","."],
               ["#","#","#","*",".","."],
@@ -62,23 +62,18 @@ from itertools import product
 class Solution:
     def rotateTheBox(self, box: List[List[str]]) -> List[List[str]]:
         m, n = len(box), len(box[0])
-        box_rotated = [[None] * m for _ in range(n)]
-
-        # Rotation
-        for i, j in product(range(m), range(n)):
-            box_rotated[j][m - i - 1] = box[i][j]
-
-        # Falling
-        for j in range(m):
-            i = n - 1
-            while i >= 0:
-                if i >= 0 and box_rotated[i][j] == '#':
-                    target_i = i
-                    while target_i + 1 < n and box_rotated[target_i + 1][j] == '.':
-                        target_i += 1
-                    box_rotated[i][j], box_rotated[target_i][j] = box_rotated[target_i][j], box_rotated[i][j]
-                i -= 1
-
+        box_rotated = [['.'] * m for _ in range(n)]
+        for i in range(m):
+            j = n - 1
+            while j >= 0:
+                if box[i][j] == '#':
+                    target_j = j
+                    while target_j + 1 < n and box[i][target_j + 1] == '.':
+                        target_j += 1
+                    box[i][j], box[i][target_j] = box[i][target_j], box[i][j]
+                    box_rotated[target_j][m - i - 1] = box[i][target_j]
+                box_rotated[j][m - i - 1] = box[i][j]
+                j -= 1
         return box_rotated
 
 
