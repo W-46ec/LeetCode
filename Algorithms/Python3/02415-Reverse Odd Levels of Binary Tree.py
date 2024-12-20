@@ -61,32 +61,18 @@ from typing import Optional
 from collections import defaultdict
 
 class Solution:
-    def reverseOddLevels(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        queue, node_dict = [(root, 0)], defaultdict(list)
-        while queue:
-            node, level = queue.pop(0)
-            queue += [(node.left, level + 1)] if node.left else []
-            queue += [(node.right, level + 1)] if node.right else []
-            if level % 2:
-                node_dict[level] = [node.val] + node_dict[level]
-            else:
-                node_dict[level] += [node.val]
+    def reverse_nodes(self, left_tree, right_tree, level):
+        if not left_tree or not right_tree:
+            return
+        if level % 2 == 1:
+            left_tree.val, right_tree.val = right_tree.val, left_tree.val
+        self.reverse_nodes(left_tree.left, right_tree.right, level + 1)
+        self.reverse_nodes(right_tree.left, left_tree.right, level + 1)
 
-        nodes = []
-        for lv in range(max(node_dict.keys()) + 1):
-            nodes += node_dict[lv]
-        
-        root_reversed = TreeNode(nodes[0])
-        stack = [(root_reversed, 0)]
-        while stack:
-            node, idx = stack.pop()
-            if 2 * idx + 1 < len(nodes):
-                node.left = TreeNode(nodes[2 * idx + 1])
-                stack += [(node.left, 2 * idx + 1)]
-            if 2 * idx + 2 < len(nodes):
-                node.right = TreeNode(nodes[2 * idx + 2])
-                stack += [(node.right, 2 * idx + 2)]
-        return root_reversed
+    def reverseOddLevels(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        # Recursive solution
+        self.reverse_nodes(root.left, root.right, 1)
+        return root
 
 
 class Test(unittest.TestCase):
